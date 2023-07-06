@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.RedditClientV2" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.RedditClientV2.Starting" parent="@style/Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/reddit_orange</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/reddit_launcher</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.RedditClientV2</item>
+    </style>
+</resources>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RedditClientV2</string>
+    <string name="post_thumbnail">Post thumbnail</string>
+    <string name="loading">Loading…</string>
+</resources>
