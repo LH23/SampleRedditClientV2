@@ -6,7 +6,3 @@ plugins {
     alias(libs.plugins.ksp) apply false
 }
 true // Needed to make the Suppress annotation work for the plugins block
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-}

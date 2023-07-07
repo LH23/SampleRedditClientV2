@@ -1,7 +1,6 @@
 package io.moonlighting.redditclientv2.core.data.remote
 
 import android.util.Log
-import io.moonlighting.redditclientv2.core.data.local.RedditPostsLocalDSImpl
 
 fun interface RedditPostsRemoteDS {
     fun getRedditTopPosts(): List<RedditPostRemote>

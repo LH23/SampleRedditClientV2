@@ -26,7 +26,7 @@ class RedditClientRepositoryImpl(
     override suspend fun getRedditTopPosts() = getRedditTopPosts(Dispatchers.IO, true)
 
     @VisibleForTesting
-    private suspend fun getRedditTopPosts(
+    suspend fun getRedditTopPosts(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         updateFromRemote: Boolean = false
     ): Deferred<Flow<List<RedditPost>>>{

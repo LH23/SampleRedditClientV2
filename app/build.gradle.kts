@@ -33,6 +33,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -41,6 +42,9 @@ android {
         kotlinOptions {
             jvmTarget = "1.8"
         }
+    }
+    tasks.withType<Test> {
+        useJUnitPlatform()
     }
 
     buildFeatures {
@@ -83,13 +87,12 @@ dependencies {
 
     implementation(libs.compose)
 
-//    testImplementation(libs.junit)
-    testImplementation(libs.jupiter)
+    testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockito.core)
-    androidTestImplementation(libs.androidx.test.ext.junit)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
-//    androidTestImplementation(libs.ui.test.junit4)
 
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)

@@ -3,14 +3,12 @@ agp = "8.2.0-alpha10"
 kotlin = "1.8.10"
 ksp = "1.8.10-1.0.9"
 core-ktx = "1.10.1"
-#junit = "5.0.0"
-jupiter = "5.8.2"
-androidx-test-ext-junit = "1.1.5"
+jupiter = "5.9.3"
 espresso-core = "3.5.1"
 lifecycle-runtime-ktx = "2.6.1"
 activity-compose = "1.7.2"
 compose-bom = "2023.06.01"
-navigation = "4.5.0"
+navigation = "4.99.0"
 retrofit = "2.9.0"
 moshi = "1.15.0"
 converter-moshi = "2.9.0"
@@ -27,9 +25,8 @@ room-ktx = "2.5.2"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
-#junit = { group = "junit", name = "junit", version.ref = "junit" }
-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "jupiter" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "jupiter" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jupiter" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
@@ -39,7 +36,6 @@ ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 navigation = { group = "com.google.android.libraries.navigation", name = "navigation", version.ref = "navigation" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
