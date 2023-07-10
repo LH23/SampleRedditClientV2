@@ -8,6 +8,9 @@ import io.moonlighting.redditclientv2.core.data.remote.RedditPostsRemoteDS
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -33,21 +36,23 @@ class RedditClientRepositoryImplTest {
     private val postLocalRemote1 = RedditPostLocal(RedditPostEntity(postRemote1))
     private val postLocalRemote2 = RedditPostLocal(RedditPostEntity(postRemote2))
 
+    private val testDispatcher = StandardTestDispatcher()
+    private val testScope = TestScope(testDispatcher)
+
     @BeforeEach
     fun setup() {
         MockitoAnnotations.openMocks(this)
         repository = RedditClientRepositoryImpl(redditPostsLocalDS, redditPostsRemoteDS)
-
     }
 
     @Test
-    fun `getRedditTopPosts should fetch posts from local data source by default`() = runBlocking<Unit> {
+    fun `getRedditTopPosts should fetch posts from local data source by default`() = testScope.runTest {
         `when`(redditPostsLocalDS.getRedditTopPosts()).thenReturn(listOf(postLocal1, postLocal2))
         `when`(redditPostsLocalDS.updateRedditLocalPosts(redditPostsRemoteDS.getRedditTopPosts())).thenAnswer {
             throw UnsupportedOperationException("updateRedditLocalPosts should not be called when updateFromRemote is false")
         }
 
-        val posts = repository.getRedditTopPosts(dispatcher=Dispatchers.IO, updateFromRemote=false)
+        val posts = repository.getRedditTopPosts(dispatcher=testDispatcher, updateFromRemote=false)
         posts.await().collect() { result ->
             assertEquals(2, result.size)
             assertEquals("10", result[0].fullname)
@@ -58,14 +63,14 @@ class RedditClientRepositoryImplTest {
     }
 
     @Test
-    fun `getRedditTopPosts should replace local data source from remote`(): Unit = runBlocking<Unit> {
+    fun `getRedditTopPosts should replace local data source from remote`(): Unit = testScope.runTest {
         `when`(redditPostsRemoteDS.getRedditTopPosts()).thenReturn(listOf(postRemote1, postRemote2))
         `when`(redditPostsLocalDS.getRedditTopPosts()).thenReturn(listOf(postLocal1, postLocal2))
         `when`(redditPostsLocalDS.updateRedditLocalPosts(redditPostsRemoteDS.getRedditTopPosts())).thenAnswer {
             `when`(redditPostsLocalDS.getRedditTopPosts()).thenReturn(listOf(postLocalRemote1, postLocalRemote2))
         }
 
-        val posts = repository.getRedditTopPosts(dispatcher=Dispatchers.IO, updateFromRemote=true)
+        val posts = repository.getRedditTopPosts(dispatcher=testDispatcher, updateFromRemote=true)
         posts.await().collect { result ->
             assertEquals(2, result.size)
             assertEquals("20", result[0].fullname)

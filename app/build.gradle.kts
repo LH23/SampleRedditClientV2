@@ -89,6 +89,7 @@ dependencies {
 
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockito.core)
+    testImplementation(libs.kotlinx.coroutines.test)
     testRuntimeOnly(libs.junit.jupiter.engine)
 
     androidTestImplementation(libs.espresso.core)
