@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.moonlighting.redditclientv2.MainActivityUiState.Loading
-import io.moonlighting.redditclientv2.MainActivityUiState.Success
+import io.moonlighting.redditclientv2.MainActivityUiState.*
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
 import io.moonlighting.redditclientv2.core.data.RedditPost
+import io.moonlighting.redditclientv2.core.data.RepoResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -38,11 +38,14 @@ class MainViewModel(private val repository: RedditClientRepository) : ViewModel(
     }
 
     private suspend fun syncRepo() {
-        repository.getRedditTopPosts().await().map { posts ->
-            val convertedPosts = posts.map { post ->
-                UIRedditPost(post)
+        repository.getRedditTopPosts().await().map { result ->
+            when (result) {
+                is RepoResult.Error -> Error("Loading error")
+                is RepoResult.Loading -> Loading
+                is RepoResult.Success -> Success(result.posts.map { post ->
+                    UIRedditPost(post)
+                })
             }
-            Success(convertedPosts)
         }.collect {
             _uiState.value = it
         }
@@ -56,7 +59,9 @@ class MainViewModel(private val repository: RedditClientRepository) : ViewModel(
 sealed interface MainActivityUiState {
     object Loading : MainActivityUiState
     data class Success(val redditPosts: List<UIRedditPost>) : MainActivityUiState
+    data class Error(val error: String) : MainActivityUiState
 }
+
 
 data class UIRedditPost(
     val fullname: String,

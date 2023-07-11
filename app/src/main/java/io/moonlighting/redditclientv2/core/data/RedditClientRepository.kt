@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 
 fun interface RedditClientRepository {
-    suspend fun getRedditTopPosts(): Deferred<Flow<List<RedditPost>>>
+    suspend fun getRedditTopPosts(): Deferred<Flow<RepoResult<List<RedditPost>>>>
 }
 
 class RedditClientRepositoryImpl(
@@ -21,7 +21,7 @@ class RedditClientRepositoryImpl(
     private val redditPostsRemoteDS: RedditPostsRemoteDS) :
     RedditClientRepository {
 
-    private var redditTopPosts: Flow<List<RedditPost>> = flowOf()
+    private var redditTopPosts: Flow<RepoResult<List<RedditPost>>> = flowOf()
 
     override suspend fun getRedditTopPosts() = getRedditTopPosts(Dispatchers.IO, true)
 
@@ -29,16 +29,17 @@ class RedditClientRepositoryImpl(
     suspend fun getRedditTopPosts(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         updateFromRemote: Boolean = false
-    ): Deferred<Flow<List<RedditPost>>>{
+    ): Deferred<Flow<RepoResult<List<RedditPost>>>>{
         return withContext(dispatcher) {
             async {
                 if (updateFromRemote) {
                     redditPostsLocalDS.updateRedditLocalPosts(redditPostsRemoteDS.getRedditTopPosts())
                 }
+                val result = redditPostsLocalDS.getRedditTopPosts().map { postLocal ->
+                    RedditPost(postLocal)
+                }
                 redditTopPosts = flowOf(
-                    redditPostsLocalDS.getRedditTopPosts().map { postLocal ->
-                        RedditPost(postLocal)
-                    }
+                    RepoResult.Success(result)
                 )
                 redditTopPosts
             }
@@ -49,10 +50,10 @@ class RedditClientRepositoryImpl(
 
 class RedditClientRepositoryFakeImpl : RedditClientRepository {
 
-    override suspend fun getRedditTopPosts(): Deferred<Flow<List<RedditPost>>> =
+    override suspend fun getRedditTopPosts(): Deferred<Flow<RepoResult<List<RedditPost>>>> =
         withContext(Dispatchers.IO) {
             async {
-                flowOf(fakePosts)
+                flowOf(RepoResult.Success(fakePosts))
             }
         }
 
@@ -65,6 +66,12 @@ class RedditClientRepositoryFakeImpl : RedditClientRepository {
         )
     }
 
+}
+
+sealed class RepoResult<out R> {
+    data class Success<out T>(val posts: T) : RepoResult<T>()
+    data class Error(val exception: Exception) : RepoResult<Nothing>()
+    object Loading : RepoResult<Nothing>()
 }
 
 

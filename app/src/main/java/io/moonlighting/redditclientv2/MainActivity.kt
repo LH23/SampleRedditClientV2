@@ -42,6 +42,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import io.moonlighting.redditclientv2.MainActivityUiState.Error
 import io.moonlighting.redditclientv2.MainActivityUiState.Loading
 import io.moonlighting.redditclientv2.MainActivityUiState.Success
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl
@@ -83,6 +84,7 @@ fun RedditClientActivityScreen(
         when (uiState) {
             is Loading -> true
             is Success -> false
+            is Error -> false
         }
     }
 
@@ -104,8 +106,17 @@ fun RedditClientActivityScreen(
             when (uiState) {
                 is Loading -> { LoadingScreen() }
                 is Success -> { ListOfPosts((uiState as Success).redditPosts, viewModel::onPostClick)}
+                is Error -> { ErrorMessage() }
             }
         }
+    }
+}
+
+@Composable
+fun ErrorMessage() {
+    Row(horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically) {
+        Text(text = stringResource(R.string.error_loading_posts))
     }
 }
 
@@ -119,7 +130,8 @@ fun LoadingScreen() {
         )
         Spacer(modifier = Modifier.width(width = 8.dp))
         Text(text = stringResource(R.string.loading))
-    }}
+    }
+}
 
 @Composable
 fun ListOfPosts(redditPosts: List<UIRedditPost>, onPostClick: (UIRedditPost) -> Unit) {

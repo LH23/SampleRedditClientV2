@@ -2,4 +2,5 @@
     <string name="app_name">RedditClientV2</string>
     <string name="post_thumbnail">Post thumbnail</string>
     <string name="loading">Loading…</string>
+    <string name="error_loading_posts">Error loading posts from Reddit</string>
 </resources>

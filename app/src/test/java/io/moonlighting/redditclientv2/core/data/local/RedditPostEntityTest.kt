@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class RedditPostEntityTest {
 
     @Test
-    fun `RedditPostEntityTest(redditPostRemote) constructor initializes properties correctly`() {
+    fun `constructor from remote initializes properties correctly`() {
         // given
         val redditPostRemote = RedditPostRemote(
             fullname = "asdasd",

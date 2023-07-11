@@ -54,11 +54,12 @@ class RedditClientRepositoryImplTest {
 
         val posts = repository.getRedditTopPosts(dispatcher=testDispatcher, updateFromRemote=false)
         posts.await().collect() { result ->
-            assertEquals(2, result.size)
-            assertEquals("10", result[0].fullname)
-            assertEquals("TitleLocal1", result[0].title)
-            assertEquals("11", result[1].fullname)
-            assertEquals("TitleLocal2", result[1].title)
+            (result as RepoResult.Success).let {
+                assertEquals(2, it.posts.size)
+                assertEquals("10", it.posts[0].fullname)
+                assertEquals("TitleLocal1", it.posts[0].title)
+                assertEquals("11", it.posts[1].fullname)
+                assertEquals("TitleLocal2", it.posts[1].title) }
         }
     }
 
@@ -72,11 +73,13 @@ class RedditClientRepositoryImplTest {
 
         val posts = repository.getRedditTopPosts(dispatcher=testDispatcher, updateFromRemote=true)
         posts.await().collect { result ->
-            assertEquals(2, result.size)
-            assertEquals("20", result[0].fullname)
-            assertEquals("TitleRemote1", result[0].title)
-            assertEquals("21", result[1].fullname)
-            assertEquals("TitleRemote2", result[1].title)
+            (result as RepoResult.Success).let {
+                assertEquals(2, it.posts.size)
+                assertEquals("20", it.posts[0].fullname)
+                assertEquals("TitleRemote1", it.posts[0].title)
+                assertEquals("21", it.posts[1].fullname)
+                assertEquals("TitleRemote2", it.posts[1].title)
+            }
         }
     }
 }
