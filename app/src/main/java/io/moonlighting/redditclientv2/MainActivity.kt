@@ -42,9 +42,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import io.moonlighting.redditclientv2.MainActivityUiState.Error
-import io.moonlighting.redditclientv2.MainActivityUiState.Loading
-import io.moonlighting.redditclientv2.MainActivityUiState.Success
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl
 import io.moonlighting.redditclientv2.ui.theme.RedditClientV2Theme
 import io.moonlighting.redditclientv2.ui.theme.RedditOrange
@@ -78,15 +75,9 @@ fun RedditClientActivityScreen(
     splashScreen: SplashScreen?
 ) {
 
-    val uiState by viewModel.uiState.collectAsState(initial = Loading)
+    val uiState by viewModel.uiState.collectAsState(initial = MainUiState(loading = true))
 
-    splashScreen?.setKeepOnScreenCondition {
-        when (uiState) {
-            is Loading -> true
-            is Success -> false
-            is Error -> false
-        }
-    }
+    splashScreen?.setKeepOnScreenCondition{ uiState.loading }
 
     Scaffold(
         topBar = {
@@ -103,10 +94,12 @@ fun RedditClientActivityScreen(
         Surface (modifier = Modifier
             .padding(it)
             .fillMaxSize()) {
-            when (uiState) {
-                is Loading -> { LoadingScreen() }
-                is Success -> { ListOfPosts((uiState as Success).redditPosts, viewModel::onPostClick)}
-                is Error -> { ErrorMessage() }
+            when {
+                uiState.loading -> { LoadingScreen() }
+                uiState.error != null -> { ErrorMessage() } // TODO pass the error message or add an errortype enum
+                uiState.redditPosts.isNotEmpty() -> {
+                    ListOfPosts(uiState.redditPosts, viewModel::onPostClick)
+                }
             }
         }
     }
@@ -177,8 +170,10 @@ fun RedditPostCard(post: UIRedditPost, onPostClick: (UIRedditPost) -> Unit) {
 @Composable
 fun RedditPostCardPreview() {
     val post = UIRedditPost("00_asdcvb",
-        "This is a test post with something very amazing", "r/amazed", "u/lio23",
-        "https://freeiconshop.com/wp-content/uploads/edd/reddit-flat.png", "https://freeiconshop.com/icon/reddit-icon-flat/")
+        "This is a test post with something very amazing",
+        "r/amazed", "u/lio23",
+        "https://freeiconshop.com/wp-content/uploads/edd/reddit-flat.png",
+        "https://freeiconshop.com/icon/reddit-icon-flat/")
     RedditPostCard(post) { p -> Log.d("preview", "$p") }
 }
 
