@@ -25,6 +25,7 @@ interface RedditPostsDao {
 
 @Database(entities = [RedditPostEntity::class], version = 1)
 abstract class RedditDatabase : RoomDatabase() {
+
     abstract fun redditPostsDao(): RedditPostsDao
 }
 

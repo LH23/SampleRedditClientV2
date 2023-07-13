@@ -11,12 +11,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 fun interface RedditClientRepository {
     suspend fun getRedditTopPosts(): Deferred<Flow<RepoResult<List<RedditPost>>>>
 }
 
-class RedditClientRepositoryImpl(
+
+class RedditClientRepositoryImpl @Inject constructor(
     private val redditPostsLocalDS: RedditPostsLocalDS,
     private val redditPostsRemoteDS: RedditPostsRemoteDS) :
     RedditClientRepository {

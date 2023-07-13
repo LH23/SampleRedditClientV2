@@ -1,8 +1,11 @@
 [versions]
-agp = "8.2.0-alpha10"
+agp = "8.2.0-alpha12"
+hilt-android-compiler = "2.44"
+hilt-android = "2.44"
 kotlin = "1.8.10"
 kotlinx-coroutines-test = "1.7.2"
 ksp = "1.8.10-1.0.9"
+hilt = "2.44"
 core-ktx = "1.10.1"
 jupiter = "5.9.3"
 espresso-core = "3.5.1"
@@ -26,6 +29,8 @@ room-ktx = "2.5.2"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android-compiler" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jupiter" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
@@ -59,7 +64,7 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [bundles]
 

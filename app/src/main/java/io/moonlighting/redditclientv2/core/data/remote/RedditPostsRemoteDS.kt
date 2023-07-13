@@ -1,12 +1,15 @@
 package io.moonlighting.redditclientv2.core.data.remote
 
 import android.util.Log
+import javax.inject.Inject
 
 fun interface RedditPostsRemoteDS {
     fun getRedditTopPosts(): List<RedditPostRemote>
 }
 
-class RedditPostsRemoteDSImpl(private val apiService: RedditApiService) : RedditPostsRemoteDS {
+class RedditPostsRemoteDSImpl @Inject constructor (
+    private val apiService: RedditApiService
+) : RedditPostsRemoteDS {
 
     private var topPostsList: List<RedditPostRemote>? = listOf()
 

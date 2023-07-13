@@ -2,8 +2,8 @@ package io.moonlighting.redditclientv2
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
 import io.moonlighting.redditclientv2.core.data.RedditPost
 import io.moonlighting.redditclientv2.core.data.RepoResult
@@ -11,21 +11,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(private val repository: RedditClientRepository) : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor (
+    private val repository: RedditClientRepository
+) : ViewModel() {
     companion object {
         private const val TAG = "MainViewModel"
     }
 
-    class Factory(private val parameter: RedditClientRepository) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return MainViewModel(parameter) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.simpleName}")
-        }
-    }
+//    class Factory(private val parameter: RedditClientRepository) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+//                @Suppress("UNCHECKED_CAST")
+//                return MainViewModel(parameter) as T
+//            }
+//            throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.simpleName}")
+//        }
+//    }
 
     private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(loading=true))
     val uiState: StateFlow<MainUiState> = _uiState

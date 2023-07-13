@@ -2,6 +2,7 @@ package io.moonlighting.redditclientv2.core.data.local
 
 import android.util.Log
 import io.moonlighting.redditclientv2.core.data.remote.RedditPostRemote
+import javax.inject.Inject
 
 interface RedditPostsLocalDS {
     fun getRedditTopPosts(): List<RedditPostLocal>
@@ -9,7 +10,9 @@ interface RedditPostsLocalDS {
     fun removeAllSavedPosts()
 }
 
-class RedditPostsLocalDSImpl(private val redditDAO: RedditPostsDao) : RedditPostsLocalDS {
+class RedditPostsLocalDSImpl @Inject constructor(
+    private val redditDAO: RedditPostsDao
+) : RedditPostsLocalDS {
     companion object {
         const val TAG = "RedditPostsLocalDSImpl"
     }
@@ -28,8 +31,6 @@ class RedditPostsLocalDSImpl(private val redditDAO: RedditPostsDao) : RedditPost
     }
 
     override fun removeAllSavedPosts(): Unit = redditDAO.removeAll()
-
-
 
 }
 
