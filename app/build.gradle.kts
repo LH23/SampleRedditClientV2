@@ -67,38 +67,48 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
+    implementation(libs.annotations)
+
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-//    implementation(libs.navigation)
+
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.compose)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    //    implementation(libs.navigation)
+
+
     implementation(libs.retrofit)
     implementation(libs.moshi)
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
     implementation(libs.glide)
-//    annotationProcessor(libs.glide.compiler) // shouldn't be required anymore
     ksp(libs.glideksp)
-    implementation(libs.annotations)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.mockito.core)
+
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    implementation(libs.compose)
 
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+
+    // test
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockito.core)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.paging.common)
     testRuntimeOnly(libs.junit.jupiter.engine)
 
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
 
+    // debug
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 

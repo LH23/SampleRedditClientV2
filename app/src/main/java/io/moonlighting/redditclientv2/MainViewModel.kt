@@ -21,16 +21,6 @@ class MainViewModel @Inject constructor (
         private const val TAG = "MainViewModel"
     }
 
-//    class Factory(private val parameter: RedditClientRepository) : ViewModelProvider.Factory {
-//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-//                @Suppress("UNCHECKED_CAST")
-//                return MainViewModel(parameter) as T
-//            }
-//            throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.simpleName}")
-//        }
-//    }
-
     private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(loading=true))
     val uiState: StateFlow<MainUiState> = _uiState
 
