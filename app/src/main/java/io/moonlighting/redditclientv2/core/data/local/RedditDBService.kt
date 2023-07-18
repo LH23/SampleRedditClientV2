@@ -1,5 +1,6 @@
 package io.moonlighting.redditclientv2.core.data.local
 
+import androidx.paging.PagingSource
 import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
@@ -13,14 +14,16 @@ import io.moonlighting.redditclientv2.core.data.remote.RedditPostRemote
 
 @Dao
 interface RedditPostsDao {
-    @get:Query("SELECT * FROM redditposts")
-    val redditPostsDB: List<RedditPostEntity>
 
-    @Query("DELETE FROM redditposts")
-    fun removeAll()
+    @Query("SELECT * FROM redditposts WHERE subreddit = :subreddit")
+    fun redditPostsDBPaging(subreddit: String): PagingSource<Int, RedditPostEntity>
+
+    @Query("DELETE FROM redditposts WHERE subreddit = :subreddit")
+    fun removeAll(subreddit: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addAll(entities: List<RedditPostEntity>)
+
 }
 
 @Database(entities = [RedditPostEntity::class], version = 1)

@@ -88,8 +88,8 @@ fun RedditClientActivityScreen(
             when {
                 uiState.loading -> { LoadingScreen() }
                 uiState.error != null -> { ErrorMessage() } // TODO pass the error message or add an errortype enum
-                uiState.redditPosts.isNotEmpty() -> {
-                    ListOfPosts(uiState.redditPosts, viewModel::onPostClick)
+                else -> {
+                    ListOfPosts(uiState.redditPostsFlow, viewModel::onPostClick)
                 }
             }
         }

@@ -3,12 +3,17 @@ package io.moonlighting.redditclientv2
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
 import io.moonlighting.redditclientv2.core.data.RedditPost
 import io.moonlighting.redditclientv2.core.data.RepoResult
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,11 +38,11 @@ class MainViewModel @Inject constructor (
     private suspend fun syncRepo() {
         repository.getRedditTopPosts().await().map { result ->
             when (result) {
-                is RepoResult.Error -> MainUiState(error="Loading error")
-                is RepoResult.Loading -> MainUiState(loading=true)
-                is RepoResult.Success -> MainUiState(redditPosts=result.posts.map { post ->
-                    UIRedditPost(post)
-                })
+                is RepoResult.Error -> MainUiState(error = "Loading error")
+                is RepoResult.Loading -> MainUiState(loading = true)
+                is RepoResult.Success -> MainUiState(redditPostsFlow = result.posts.map {
+                    post -> UIRedditPost(post)
+                }).flow
             }
         }.collect {
             _uiState.value = it
@@ -50,7 +55,7 @@ class MainViewModel @Inject constructor (
 }
 
 data class MainUiState (
-    val redditPosts: List<UIRedditPost> = emptyList(),
+    val redditPostsFlow: Flow<PagingData<UIRedditPost>> = emptyFlow(),
     val loading: Boolean = false,
     val error: String? = null
 )

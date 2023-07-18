@@ -26,15 +26,26 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import io.moonlighting.redditclientv2.R
 import io.moonlighting.redditclientv2.UIRedditPost
+import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun ListOfPosts(redditPosts: List<UIRedditPost>, onPostClick: (UIRedditPost) -> Unit) {
+fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPostClick: (UIRedditPost) -> Unit) {
+
+    val lazyPagingItems = redditPostsFlow.collectAsLazyPagingItems()
+
     LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items(redditPosts) { post ->
+        items(
+            lazyPagingItems.itemCount,
+            key = lazyPagingItems.itemKey { it }
+        ) { index ->
+            val post = lazyPagingItems[index]!!
             RedditPostCard(post, onPostClick)
         }
     }

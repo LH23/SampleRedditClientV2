@@ -4,28 +4,26 @@ import android.util.Log
 import javax.inject.Inject
 
 fun interface RedditPostsRemoteDS {
-    fun getRedditTopPosts(): List<RedditPostRemote>
+    suspend fun getRedditTopPosts(): List<RedditPostRemote>
 }
 
 class RedditPostsRemoteDSImpl @Inject constructor (
     private val apiService: RedditApiService
 ) : RedditPostsRemoteDS {
 
-    private var topPostsList: List<RedditPostRemote>? = listOf()
+    private var topPostsList: List<RedditPostRemote> = listOf()
 
-    override fun getRedditTopPosts(): List<RedditPostRemote> {
+    override suspend fun getRedditTopPosts(): List<RedditPostRemote> {
         var lastItemId = ""
-        if (topPostsList != null && topPostsList!!.isNotEmpty()) {
-            lastItemId = topPostsList!![topPostsList!!.size - 1].fullname
+        if (topPostsList.isNotEmpty()) {
+            lastItemId = topPostsList[topPostsList.size - 1].fullname
         }
-        val response = apiService.getTopPostsJSON(10, lastItemId).execute()
-        if (response.isSuccessful) {
-            topPostsList = response.body()?.data?.postsData?.map { jsonpostdata ->
-                RedditPostRemote(jsonpostdata.post)
-            }
+        val response = apiService.getTopPostsJSON(10, lastItemId)
+        topPostsList = response.data.postsData.map { jsonpostdata ->
+            RedditPostRemote(jsonpostdata.post)
         }
-        Log.d("RedditPostsRemoteDSImpl", "Remotes ${topPostsList?.map { it.title }}")
-        return topPostsList!!
+        Log.d("RedditPostsRemoteDSImpl", "Remotes ${topPostsList.map { it.title }}")
+        return topPostsList
     }
 
 }

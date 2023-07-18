@@ -7,10 +7,10 @@ import retrofit2.http.Query
 
 fun interface RedditApiService {
     @GET("/top.json")
-    fun getTopPostsJSON(
+    suspend fun getTopPostsJSON(
         @Query("limit") limit: Int,
         @Query("after") after: String?
-    ): Call<RedditPostsJSONResponse>
+    ): RedditPostsJSONResponse
 }
 
 data class RedditPostsJSONResponse(@Json(name = "data") val data: PostsJsonData) {
