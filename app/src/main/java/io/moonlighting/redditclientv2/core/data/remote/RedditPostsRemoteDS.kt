@@ -1,10 +1,16 @@
 package io.moonlighting.redditclientv2.core.data.remote
 
 import android.util.Log
+import androidx.paging.LoadType
 import javax.inject.Inject
 
 fun interface RedditPostsRemoteDS {
-    suspend fun getRedditTopPosts(): List<RedditPostRemote>
+    suspend fun getRedditTopPosts(
+        subreddit: String,
+        after: String?,
+        before: String?,
+        limit: Int
+    ): List<RedditPostRemote>
 }
 
 class RedditPostsRemoteDSImpl @Inject constructor (
@@ -13,7 +19,12 @@ class RedditPostsRemoteDSImpl @Inject constructor (
 
     private var topPostsList: List<RedditPostRemote> = listOf()
 
-    override suspend fun getRedditTopPosts(): List<RedditPostRemote> {
+    override suspend fun getRedditTopPosts(
+        subreddit: String,
+        after: String?,
+        before: String?,
+        limit: Int
+    ): List<RedditPostRemote> {
         var lastItemId = ""
         if (topPostsList.isNotEmpty()) {
             lastItemId = topPostsList[topPostsList.size - 1].fullname

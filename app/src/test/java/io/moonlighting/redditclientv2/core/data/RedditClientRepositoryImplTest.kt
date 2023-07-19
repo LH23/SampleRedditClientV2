@@ -29,12 +29,12 @@ class RedditClientRepositoryImplTest {
     @Mock
     private lateinit var redditPostsRemoteDS: RedditPostsRemoteDS
 
-    private val postLocal1 = RedditPostLocal("10","TitleLocal1","","","","")
-    private val postLocal2 = RedditPostLocal("11","TitleLocal2","","","","")
+    private val postLocal1 = RedditPostEntity("10","TitleLocal1","","","","")
+    private val postLocal2 = RedditPostEntity("11","TitleLocal2","","","","")
     private val postRemote1 = RedditPostRemote("20","TitleRemote1","","","","")
     private val postRemote2 = RedditPostRemote("21","TitleRemote2","","","","")
-    private val postLocalRemote1 = RedditPostLocal(RedditPostEntity(postRemote1))
-    private val postLocalRemote2 = RedditPostLocal(RedditPostEntity(postRemote2))
+    private val postLocalRemote1 = RedditPostEntity(postRemote1)
+    private val postLocalRemote2 = RedditPostEntity(postRemote2)
 
     private val testDispatcher = StandardTestDispatcher()
     private val testScope = TestScope(testDispatcher)
@@ -52,9 +52,10 @@ class RedditClientRepositoryImplTest {
             throw UnsupportedOperationException("updateRedditLocalPosts should not be called when updateFromRemote is false")
         }
 
-        val posts = repository.getRedditTopPosts(dispatcher=testDispatcher, updateFromRemote=false)
-        posts.await().collect() { result ->
+        val posts = repository.getRedditTopPosts("test",10,updateFromRemote=false)
+        posts.collect() { result ->
             (result as RepoResult.Success).let {
+                // TODO get it.posts from pagingData to list using TestPager
                 assertEquals(2, it.posts.size)
                 assertEquals("10", it.posts[0].fullname)
                 assertEquals("TitleLocal1", it.posts[0].title)

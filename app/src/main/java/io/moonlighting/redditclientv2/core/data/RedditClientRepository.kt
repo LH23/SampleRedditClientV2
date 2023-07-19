@@ -15,10 +15,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 fun interface RedditClientRepository {
-    fun getRedditTopPosts(subreddit: String, pageSize: Int): Flow<PagingData<RedditPost>>
+    fun getRedditTopPosts(subreddit: String, pageSize: Int): Flow<RepoResult<PagingData<RedditPost>>>
 
 }
 
@@ -31,23 +32,22 @@ class RedditClientRepositoryImpl @Inject constructor(
     private var redditTopPosts: Flow<RepoResult<List<RedditPost>>> = flowOf()
 
     override fun getRedditTopPosts(subreddit: String, pageSize: Int) = getRedditTopPosts(
-        subreddit, pageSize, Dispatchers.IO, true)
+        subreddit, pageSize, true)
 
     @OptIn(ExperimentalPagingApi::class)
     @VisibleForTesting
     fun getRedditTopPosts(
         subreddit: String,
         pageSize: Int,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
         updateFromRemote: Boolean = false
-    ): Flow<PagingData<RedditPost>>{
+    ): Flow<RepoResult<PagingData<RedditPost>>>{
         return Pager(
             config = PagingConfig(pageSize),
             remoteMediator = RedditPageMediator(redditPostsLocalDS, redditPostsRemoteDS, subreddit)
         ) {
             redditPostsLocalDS.getRedditTopPostsPaging(subreddit)
         }.flow.map { pagingData ->
-            pagingData.map { entity -> RedditPost(entity) }
+            RepoResult.Success(pagingData.map { entity -> RedditPost(entity) })
         }
 
 //        return withContext(dispatcher) {
@@ -68,24 +68,22 @@ class RedditClientRepositoryImpl @Inject constructor(
 }
 
 
-//class RedditClientRepositoryFakeImpl : RedditClientRepository {
-//
-//    override fun getRedditTopPosts(subreddit: String, pageSize: Int) =
-//        withContext(Dispatchers.IO) {
-//            async {
-//                flowOf(RepoResult.Success(fakePosts))
-//            }
-//        }
-//
-//    companion object {
-//        val fakePosts: List<RedditPost> = listOf(
-//            RedditPost("1", "Hello im a reddit post1","r/test","u/lio","",""),
-//            RedditPost("2", "Hello im a reddit post2","r/test","u/lio","",""),
-//            RedditPost("3", "Hello im a reddit post3","r/test","u/lio","",""),
-//            RedditPost("4", "Hello im a reddit post4","r/test","u/lio","","")
-//        )
-//    }
-//}
+class RedditClientRepositoryFakeImpl : RedditClientRepository {
+
+    override fun getRedditTopPosts(subreddit: String, pageSize: Int):
+            Flow<RepoResult<PagingData<RedditPost>>> {
+        return flowOf(RepoResult.Success(PagingData.from(fakePosts)))
+    }
+
+    companion object {
+        val fakePosts: List<RedditPost> = listOf(
+            RedditPost("1", "Hello im a reddit post1","r/test","u/lio","",""),
+            RedditPost("2", "Hello im a reddit post2","r/test","u/lio","",""),
+            RedditPost("3", "Hello im a reddit post3","r/test","u/lio","",""),
+            RedditPost("4", "Hello im a reddit post4","r/test","u/lio","","")
+        )
+    }
+}
 
 sealed class RepoResult<out R> {
     data class Success<out T>(val posts: T) : RepoResult<T>()

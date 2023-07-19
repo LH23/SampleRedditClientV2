@@ -80,7 +80,6 @@ dependencies {
     implementation(platform(libs.compose.bom))
     //    implementation(libs.navigation)
 
-
     implementation(libs.retrofit)
     implementation(libs.moshi)
     implementation(libs.converter.moshi)
@@ -90,6 +89,7 @@ dependencies {
 
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.hilt.android)

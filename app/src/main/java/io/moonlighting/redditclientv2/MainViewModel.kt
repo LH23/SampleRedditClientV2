@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
 import io.moonlighting.redditclientv2.core.data.RedditPost
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +28,9 @@ class MainViewModel @Inject constructor (
         private const val TAG = "MainViewModel"
     }
 
+    private val subreddit: String = ""
+    private val pagesize: Int = 20
+
     private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(loading=true))
     val uiState: StateFlow<MainUiState> = _uiState
 
@@ -36,13 +41,13 @@ class MainViewModel @Inject constructor (
     }
 
     private suspend fun syncRepo() {
-        repository.getRedditTopPosts().await().map { result ->
+        repository.getRedditTopPosts(subreddit, pagesize).map { result ->
             when (result) {
                 is RepoResult.Error -> MainUiState(error = "Loading error")
                 is RepoResult.Loading -> MainUiState(loading = true)
-                is RepoResult.Success -> MainUiState(redditPostsFlow = result.posts.map {
-                    post -> UIRedditPost(post)
-                }).flow
+                is RepoResult.Success -> MainUiState(redditPostsFlow = flowOf(result.posts.map { pagingData ->
+                    UIRedditPost(pagingData)
+                }))
             }
         }.collect {
             _uiState.value = it
