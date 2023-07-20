@@ -19,10 +19,10 @@ interface RedditPostsDao {
     fun redditPostsDBPaging(subreddit: String): PagingSource<Int, RedditPostEntity>
 
     @Query("DELETE FROM redditposts WHERE subreddit = :subreddit")
-    fun removeAll(subreddit: String)
+    suspend fun removeAll(subreddit: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addAll(entities: List<RedditPostEntity>)
+    suspend fun addAll(entities: List<RedditPostEntity>)
 
 }
 

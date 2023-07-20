@@ -1,7 +1,7 @@
 [versions]
-agp = "8.2.0-alpha12"
-hilt-android-compiler = "2.44"
-hilt-android = "2.44"
+agp = "8.2.0-alpha13"
+hilt-android-compiler = "2.47"
+hilt-android = "2.47"
 kotlin = "1.8.10"
 kotlinx-coroutines-test = "1.7.2"
 ksp = "1.8.10-1.0.9"
@@ -17,16 +17,13 @@ paging = "3.2.0-rc01"
 retrofit = "2.9.0"
 moshi = "1.15.0"
 converter-moshi = "2.9.0"
-moshi-kotlin = "1.15.0"
 glide = "4.15.1"
 compose = "1.0.0-alpha.3"
 annotations = "4.15.1"
 glide-ksp = "4.15.1"
 core-splashscreen = "1.0.1"
 mockito-core = "5.4.0"
-room-common = "2.5.2"
-room-compiler = "2.5.2"
-room-ktx = "2.5.2"
+room = "2.5.2"
 
 [libraries]
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
@@ -52,7 +49,7 @@ navigation = { group = "com.google.android.libraries.navigation", name = "naviga
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "converter-moshi" }
-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi-kotlin" }
+moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "compose" }
@@ -60,10 +57,10 @@ annotations = { group = "com.github.bumptech.glide", name = "annotations", versi
 glideksp = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide-ksp" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
-androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "room-common" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-ktx" }
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room-compiler" }
-androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room-compiler" }
+androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
