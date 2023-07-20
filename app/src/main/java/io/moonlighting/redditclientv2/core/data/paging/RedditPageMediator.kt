@@ -16,6 +16,11 @@ class RedditPageMediator(
     private val redditPostsRemoteDS: RedditPostsRemoteDS,
     private val subreddit: String
 ) : RemoteMediator<Int, RedditPostEntity>() {
+
+    override suspend fun initialize(): InitializeAction {
+        return InitializeAction.LAUNCH_INITIAL_REFRESH
+    }
+
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, RedditPostEntity>
@@ -46,8 +51,9 @@ class RedditPageMediator(
                     else -> state.config.pageSize
                 }
             )
-
-            redditPostsLocalDS.updateRedditLocalPosts(remotePosts, subreddit)
+            redditPostsLocalDS.updateRedditLocalPosts(
+                remotePosts, subreddit, loadType == LoadType.REFRESH
+            )
 
             return MediatorResult.Success(endOfPaginationReached = remotePosts.isEmpty())
         } catch (e: IOException) {

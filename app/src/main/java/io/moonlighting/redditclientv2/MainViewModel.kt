@@ -3,9 +3,8 @@ package io.moonlighting.redditclientv2
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
@@ -26,10 +25,9 @@ class MainViewModel @Inject constructor (
 ) : ViewModel() {
     companion object {
         private const val TAG = "MainViewModel"
+        private const val DEFAULT_SUBREDDIT= ""
+        private const val PAGE_SIZE= 20
     }
-
-    private val subreddit: String = ""
-    private val pagesize: Int = 20
 
     private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(loading=true))
     val uiState: StateFlow<MainUiState> = _uiState
@@ -41,15 +39,23 @@ class MainViewModel @Inject constructor (
     }
 
     private suspend fun syncRepo() {
-        repository.getRedditTopPosts(subreddit, pagesize).map { result ->
+        repository.getRedditTopPosts(DEFAULT_SUBREDDIT, PAGE_SIZE).map { result ->
+            println("arrived: $result")
             when (result) {
                 is RepoResult.Error -> MainUiState(error = "Loading error")
                 is RepoResult.Loading -> MainUiState(loading = true)
-                is RepoResult.Success -> MainUiState(redditPostsFlow = flowOf(result.posts.map { pagingData ->
-                    UIRedditPost(pagingData)
-                }))
+                is RepoResult.Success -> {
+                    println("succeeded: ${result.posts}")
+                    result.posts.map { println(it); it.title }
+                    MainUiState(redditPostsFlow = flowOf(result.posts.map { post ->
+                        println("ui post: $post")
+                        UIRedditPost(post)
+                    })
+                    .cachedIn(viewModelScope))
+                }
             }
         }.collect {
+            println("collected: $it")
             _uiState.value = it
         }
     }

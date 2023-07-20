@@ -10,12 +10,9 @@ import io.moonlighting.redditclientv2.core.data.local.RedditPostEntity
 import io.moonlighting.redditclientv2.core.data.local.RedditPostsLocalDS
 import io.moonlighting.redditclientv2.core.data.paging.RedditPageMediator
 import io.moonlighting.redditclientv2.core.data.remote.RedditPostsRemoteDS
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 fun interface RedditClientRepository {
@@ -29,41 +26,28 @@ class RedditClientRepositoryImpl @Inject constructor(
     private val redditPostsRemoteDS: RedditPostsRemoteDS) :
     RedditClientRepository {
 
-    private var redditTopPosts: Flow<RepoResult<List<RedditPost>>> = flowOf()
-
     override fun getRedditTopPosts(subreddit: String, pageSize: Int) = getRedditTopPosts(
-        subreddit, pageSize, true)
+        subreddit, pageSize, false)
 
     @OptIn(ExperimentalPagingApi::class)
     @VisibleForTesting
     fun getRedditTopPosts(
         subreddit: String,
         pageSize: Int,
-        updateFromRemote: Boolean = false
+        refresh: Boolean = false
     ): Flow<RepoResult<PagingData<RedditPost>>>{
         return Pager(
-            config = PagingConfig(pageSize),
+            config = PagingConfig(
+                pageSize = pageSize,
+                enablePlaceholders = true,
+                initialLoadSize = 2
+            ),
             remoteMediator = RedditPageMediator(redditPostsLocalDS, redditPostsRemoteDS, subreddit)
         ) {
             redditPostsLocalDS.getRedditTopPostsPaging(subreddit)
         }.flow.map { pagingData ->
             RepoResult.Success(pagingData.map { entity -> RedditPost(entity) })
         }
-
-//        return withContext(dispatcher) {
-//            async {
-//                if (updateFromRemote) {
-//                    redditPostsLocalDS.updateRedditLocalPosts(redditPostsRemoteDS.getRedditTopPosts())
-//                }
-//                val result = redditPostsLocalDS.getRedditTopPosts().map { postLocal ->
-//                    RedditPost(postLocal)
-//                }
-//                redditTopPosts = flowOf(
-//                    RepoResult.Success(result)
-//                )
-//                redditTopPosts
-//            }
-//        }
     }
 }
 

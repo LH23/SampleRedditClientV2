@@ -1,7 +1,6 @@
 package io.moonlighting.redditclientv2.core.data.remote
 
 import android.util.Log
-import androidx.paging.LoadType
 import javax.inject.Inject
 
 fun interface RedditPostsRemoteDS {
