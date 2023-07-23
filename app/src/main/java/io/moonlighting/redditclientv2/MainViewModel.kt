@@ -4,17 +4,14 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
 import io.moonlighting.redditclientv2.core.data.RedditPost
-import io.moonlighting.redditclientv2.core.data.RepoResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,26 +35,16 @@ class MainViewModel @Inject constructor (
         }
     }
 
-    private suspend fun syncRepo() {
-        repository.getRedditTopPosts(DEFAULT_SUBREDDIT, PAGE_SIZE).map { result ->
-            println("arrived: $result")
-            when (result) {
-                is RepoResult.Error -> MainUiState(error = "Loading error")
-                is RepoResult.Loading -> MainUiState(loading = true)
-                is RepoResult.Success -> {
-                    println("succeeded: ${result.posts}")
-                    result.posts.map { println(it); it.title }
-                    MainUiState(redditPostsFlow = flowOf(result.posts.map { post ->
+    private fun syncRepo() {
+        _uiState.value = MainUiState(
+            redditPostsFlow = repository.getRedditTopPosts(DEFAULT_SUBREDDIT, PAGE_SIZE)
+                .map { pagingData ->
+                    pagingData.map { post ->
                         println("ui post: $post")
                         UIRedditPost(post)
-                    })
-                    .cachedIn(viewModelScope))
+                    }
                 }
-            }
-        }.collect {
-            println("collected: $it")
-            _uiState.value = it
-        }
+        )
     }
 
     fun onPostClick(post: UIRedditPost) {

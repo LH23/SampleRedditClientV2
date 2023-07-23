@@ -23,7 +23,9 @@ class RedditPostsLocalDSImpl @Inject constructor(
 
     @WorkerThread
     override fun getRedditTopPostsPaging(subreddit: String): PagingSource<Int, RedditPostEntity> {
-        return redditDAO.redditPostsDBPaging(subreddit)
+        val dbpage = redditDAO.redditPostsDBPaging()
+        Log.d(TAG, "dbpage: $dbpage subreddit: $subreddit")
+        return dbpage
     }
 
     @WorkerThread
@@ -35,7 +37,7 @@ class RedditPostsLocalDSImpl @Inject constructor(
     }
 
     @WorkerThread
-    override suspend fun removeAllSavedPosts(subreddit: String): Unit = redditDAO.removeAll(subreddit)
+    override suspend fun removeAllSavedPosts(subreddit: String): Unit = redditDAO.removeAll()
 
 
 }

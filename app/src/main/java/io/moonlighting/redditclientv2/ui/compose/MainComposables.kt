@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -25,6 +27,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -40,16 +43,38 @@ fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPostClick: (U
     val lazyPagingItems = redditPostsFlow.collectAsLazyPagingItems()
 
     LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (lazyPagingItems.loadState.refresh == LoadState.Loading) {
+            item {
+                LoadingScreen()
+            }
+        }
+
         items(
             lazyPagingItems.itemCount,
-            key = lazyPagingItems.itemKey { it }
+            key = lazyPagingItems.itemKey { it.fullname }
         ) { index ->
-            val post = lazyPagingItems[index]!!
-            RedditPostCard(post, onPostClick)
-            println("post added to the UI: $post")
+            val post = lazyPagingItems[index]
+            if (post != null) {
+                println("post added to the UI: $post")
+                RedditPostCard(post, onPostClick)
+            } else {
+                RedditPostCardPlaceholder()
+            }
         }
+
+        if (lazyPagingItems.loadState.append == LoadState.Loading) {
+            item {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally)
+                )
+            }
+        }
+
     }
 }
+
 
 @Composable
 fun ErrorMessage() {
@@ -61,7 +86,8 @@ fun ErrorMessage() {
 
 @Composable
 fun LoadingScreen() {
-    Row(horizontalArrangement = Arrangement.Center,
+    Row(modifier = Modifier.fillMaxWidth().padding(16.dp),
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically) {
         CircularProgressIndicator(
             modifier = Modifier.size(size = 48.dp),
@@ -70,6 +96,17 @@ fun LoadingScreen() {
         Spacer(modifier = Modifier.width(width = 8.dp))
         Text(text = stringResource(R.string.loading))
     }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RedditPostCardPlaceholder() {
+    ElevatedCard(modifier = Modifier
+        .fillMaxWidth()
+        .height(64.dp),
+        onClick = {}
+    ) {}
 }
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)

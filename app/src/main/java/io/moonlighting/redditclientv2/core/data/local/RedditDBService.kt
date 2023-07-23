@@ -15,11 +15,11 @@ import io.moonlighting.redditclientv2.core.data.remote.RedditPostRemote
 @Dao
 interface RedditPostsDao {
 
-    @Query("SELECT * FROM redditposts WHERE subreddit = :subreddit")
-    fun redditPostsDBPaging(subreddit: String): PagingSource<Int, RedditPostEntity>
+    @Query("SELECT * FROM redditposts")
+    fun redditPostsDBPaging(): PagingSource<Int, RedditPostEntity>
 
-    @Query("DELETE FROM redditposts WHERE subreddit = :subreddit")
-    suspend fun removeAll(subreddit: String)
+    @Query("DELETE FROM redditposts")
+    suspend fun removeAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAll(entities: List<RedditPostEntity>)

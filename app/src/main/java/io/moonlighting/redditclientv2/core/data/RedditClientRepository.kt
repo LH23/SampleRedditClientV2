@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 fun interface RedditClientRepository {
-    fun getRedditTopPosts(subreddit: String, pageSize: Int): Flow<RepoResult<PagingData<RedditPost>>>
+    fun getRedditTopPosts(subreddit: String, pageSize: Int): Flow<PagingData<RedditPost>>
 
 }
 
@@ -35,18 +35,18 @@ class RedditClientRepositoryImpl @Inject constructor(
         subreddit: String,
         pageSize: Int,
         refresh: Boolean = false
-    ): Flow<RepoResult<PagingData<RedditPost>>>{
+    ): Flow<PagingData<RedditPost>>{
         return Pager(
             config = PagingConfig(
                 pageSize = pageSize,
                 enablePlaceholders = true,
-                initialLoadSize = 2
+                initialLoadSize = pageSize*2
             ),
             remoteMediator = RedditPageMediator(redditPostsLocalDS, redditPostsRemoteDS, subreddit)
         ) {
             redditPostsLocalDS.getRedditTopPostsPaging(subreddit)
         }.flow.map { pagingData ->
-            RepoResult.Success(pagingData.map { entity -> RedditPost(entity) })
+            pagingData.map { entity -> RedditPost(entity) }
         }
     }
 }
@@ -55,8 +55,8 @@ class RedditClientRepositoryImpl @Inject constructor(
 class RedditClientRepositoryFakeImpl : RedditClientRepository {
 
     override fun getRedditTopPosts(subreddit: String, pageSize: Int):
-            Flow<RepoResult<PagingData<RedditPost>>> {
-        return flowOf(RepoResult.Success(PagingData.from(fakePosts)))
+            Flow<PagingData<RedditPost>> {
+        return flowOf(PagingData.from(fakePosts))
     }
 
     companion object {
@@ -67,12 +67,6 @@ class RedditClientRepositoryFakeImpl : RedditClientRepository {
             RedditPost("4", "Hello im a reddit post4","r/test","u/lio","","")
         )
     }
-}
-
-sealed class RepoResult<out R> {
-    data class Success<out T>(val posts: T) : RepoResult<T>()
-    data class Error(val exception: Exception) : RepoResult<Nothing>()
-    object Loading : RepoResult<Nothing>()
 }
 
 
