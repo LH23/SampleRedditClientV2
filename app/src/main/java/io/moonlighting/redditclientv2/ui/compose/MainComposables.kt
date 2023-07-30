@@ -34,7 +34,7 @@ import androidx.paging.compose.itemKey
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import io.moonlighting.redditclientv2.R
-import io.moonlighting.redditclientv2.UIRedditPost
+import io.moonlighting.redditclientv2.ui.compose.postslist.UIRedditPost
 import kotlinx.coroutines.flow.Flow
 
 @Composable

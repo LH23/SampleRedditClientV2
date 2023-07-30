@@ -1,4 +1,4 @@
-package io.moonlighting.redditclientv2
+package io.moonlighting.redditclientv2.ui.compose.postslist
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -17,17 +17,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor (
+class PostsListViewModel @Inject constructor (
     private val repository: RedditClientRepository
 ) : ViewModel() {
     companion object {
-        private const val TAG = "MainViewModel"
+        private const val TAG = "PostsListViewModel"
         private const val DEFAULT_SUBREDDIT= ""
         private const val PAGE_SIZE= 20
     }
 
-    private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(loading=true))
-    val uiState: StateFlow<MainUiState> = _uiState
+    private val _uiState: MutableStateFlow<PostsListUiState> = MutableStateFlow(PostsListUiState(loading=true))
+    val uiState: StateFlow<PostsListUiState> = _uiState
 
     init {
         viewModelScope.launch {
@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor (
     }
 
     private fun syncRepo() {
-        _uiState.value = MainUiState(
+        _uiState.value = PostsListUiState(
             redditPostsFlow = repository.getRedditTopPosts(DEFAULT_SUBREDDIT, PAGE_SIZE)
                 .map { pagingData ->
                     pagingData.map { post ->
@@ -52,7 +52,7 @@ class MainViewModel @Inject constructor (
     }
 }
 
-data class MainUiState (
+data class PostsListUiState (
     val redditPostsFlow: Flow<PagingData<UIRedditPost>> = emptyFlow(),
     val loading: Boolean = false,
     val error: String? = null
