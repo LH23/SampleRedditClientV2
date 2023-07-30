@@ -86,7 +86,6 @@ dependencies {
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
     implementation(libs.glide)
-    implementation(libs.androidx.paging.testing)
     ksp(libs.glideksp)
 
     implementation(libs.androidx.room.common)
@@ -105,6 +104,7 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.paging.common)
+    testImplementation(libs.androidx.paging.testing)
     testRuntimeOnly(libs.junit.jupiter.engine)
 
     androidTestImplementation(libs.espresso.core)

@@ -11,6 +11,7 @@ interface RedditPostsLocalDS {
     @WorkerThread fun getRedditTopPostsPaging(subreddit: String): PagingSource<Int, RedditPostEntity>
     @WorkerThread suspend fun updateRedditLocalPosts(posts: List<RedditPostRemote>, subreddit: String, refresh: Boolean)
     @WorkerThread suspend fun removeAllSavedPosts(subreddit: String)
+    @WorkerThread suspend fun getCreationTime(): Long
 
 }
 
@@ -23,9 +24,7 @@ class RedditPostsLocalDSImpl @Inject constructor(
 
     @WorkerThread
     override fun getRedditTopPostsPaging(subreddit: String): PagingSource<Int, RedditPostEntity> {
-        val dbpage = redditDAO.redditPostsDBPaging()
-        Log.d(TAG, "dbpage: $dbpage subreddit: $subreddit")
-        return dbpage
+        return redditDAO.redditPostsDBPaging()
     }
 
     @WorkerThread
@@ -38,6 +37,9 @@ class RedditPostsLocalDSImpl @Inject constructor(
 
     @WorkerThread
     override suspend fun removeAllSavedPosts(subreddit: String): Unit = redditDAO.removeAll()
+
+    @WorkerThread
+    override suspend fun getCreationTime() = redditDAO.getCreationTime()?: 0
 
 
 }

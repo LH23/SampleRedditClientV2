@@ -15,7 +15,7 @@ import io.moonlighting.redditclientv2.core.data.remote.RedditPostRemote
 @Dao
 interface RedditPostsDao {
 
-    @Query("SELECT * FROM redditposts")
+    @Query("SELECT * FROM redditposts ORDER BY _id ASC")
     fun redditPostsDBPaging(): PagingSource<Int, RedditPostEntity>
 
     @Query("DELETE FROM redditposts")
@@ -24,6 +24,8 @@ interface RedditPostsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAll(entities: List<RedditPostEntity>)
 
+    @Query("SELECT created_at FROM redditposts ORDER BY created_at DESC LIMIT 1")
+    suspend fun getCreationTime(): Long?
 }
 
 @Database(entities = [RedditPostEntity::class], version = 1)
@@ -34,7 +36,8 @@ abstract class RedditDatabase : RoomDatabase() {
 
 @Entity(tableName = "redditposts")
 data class RedditPostEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    val _id: Int?, // to keep the list ordered
     @ColumnInfo(name = "fullname")
     val fullname: String,
     @ColumnInfo(name = "title")
@@ -46,9 +49,12 @@ data class RedditPostEntity(
     @ColumnInfo(name = "thumbnail")
     val thumbnail: String,
     @ColumnInfo(name = "sourceUrl")
-    val sourceUrl: String
+    val sourceUrl: String,
+    @ColumnInfo(name = "created_at")
+    val createdAt: Long = System.currentTimeMillis()
 ) {
     constructor(redditPostRemote: RedditPostRemote) : this(
+        null,
         redditPostRemote.fullname,
         redditPostRemote.title,
         redditPostRemote.author,

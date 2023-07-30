@@ -4,11 +4,13 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import androidx.room.paging.util.queryDatabase
 import io.moonlighting.redditclientv2.core.data.local.RedditPostEntity
 import io.moonlighting.redditclientv2.core.data.local.RedditPostsLocalDS
 import io.moonlighting.redditclientv2.core.data.remote.RedditPostsRemoteDS
 import retrofit2.HttpException
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
 class RedditPageMediator(
@@ -18,7 +20,13 @@ class RedditPageMediator(
 ) : RemoteMediator<Int, RedditPostEntity>() {
 
     override suspend fun initialize(): InitializeAction {
-        return InitializeAction.LAUNCH_INITIAL_REFRESH
+        val cacheTimeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
+
+        return if (System.currentTimeMillis() - redditPostsLocalDS.getCreationTime() < cacheTimeout) {
+            InitializeAction.SKIP_INITIAL_REFRESH
+        } else {
+            InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
     }
 
     override suspend fun load(
