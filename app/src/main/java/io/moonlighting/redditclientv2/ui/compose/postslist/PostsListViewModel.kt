@@ -26,6 +26,9 @@ class PostsListViewModel @Inject constructor (
         private const val PAGE_SIZE= 20
     }
 
+    private var _useDarkMode: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val useDarkMode: StateFlow<Boolean> = _useDarkMode
+
     private val _uiState: MutableStateFlow<PostsListUiState> = MutableStateFlow(PostsListUiState(loading=true))
     val uiState: StateFlow<PostsListUiState> = _uiState
 
@@ -49,6 +52,10 @@ class PostsListViewModel @Inject constructor (
 
     fun onPostClick(post: UIRedditPost) {
         Log.d(TAG, "Clicked post: $post")
+    }
+
+    fun toggleDarkMode() {
+        _useDarkMode.value = !_useDarkMode.value
     }
 }
 

@@ -3,4 +3,5 @@
     <string name="post_thumbnail">Post thumbnail</string>
     <string name="loading">Loading…</string>
     <string name="error_loading_posts">Error loading posts from Reddit</string>
+    <string name="menu_toggle_dark_mode">Toggle Dark Mode</string>
 </resources>
