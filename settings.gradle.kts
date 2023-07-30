@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "RedditClientV2"
 include(":app")
- 
+

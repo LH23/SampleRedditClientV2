@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
@@ -74,17 +73,20 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
 
-    implementation(libs.androidx.core.splashscreen)
+    implementation(platform(libs.compose.bom))
     implementation(libs.compose)
     implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
-    //    implementation(libs.navigation)
+
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.retrofit)
     implementation(libs.moshi)
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
     implementation(libs.glide)
+    implementation(libs.androidx.paging.testing)
     ksp(libs.glideksp)
 
     implementation(libs.androidx.room.common)
@@ -107,6 +109,7 @@ dependencies {
 
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.androidx.navigation.testing)
 
     // debug
     debugImplementation(libs.ui.tooling)
