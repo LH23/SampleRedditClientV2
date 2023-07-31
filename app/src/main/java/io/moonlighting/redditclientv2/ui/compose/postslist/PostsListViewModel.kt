@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
@@ -46,7 +47,8 @@ class PostsListViewModel @Inject constructor (
                         println("ui post: $post")
                         UIRedditPost(post)
                     }
-                }
+                }.cachedIn(viewModelScope),
+            loading = false
         )
     }
 

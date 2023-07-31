@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,16 +39,18 @@ import io.moonlighting.redditclientv2.ui.theme.RedditOrange
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     private val viewModel: PostsListViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
         setContent {
             val darkMode = viewModel.useDarkMode.collectAsState().value
+            val loading = viewModel.uiState.collectAsState().value.loading
+            splashScreen.setKeepOnScreenCondition {
+                loading
+            }
 
             RedditClientV2Theme(useDarkTheme = darkMode) {
                 Surface(
@@ -99,7 +100,8 @@ fun RedditClientMainScreen(darkMode: Boolean, toggleDarkMode: () -> Unit) {
                                 ),
                                 tint = if (darkMode) Color.DarkGray
                                     else Color.White,
-                                contentDescription = stringResource(R.string.menu_toggle_dark_mode))
+                                contentDescription = stringResource(R.string.menu_toggle_dark_mode)
+                            )
                         }
                     }
                 )

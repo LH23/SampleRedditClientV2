@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +43,8 @@ fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPostClick: (U
 
     val lazyPagingItems = redditPostsFlow.collectAsLazyPagingItems()
 
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (lazyPagingItems.loadState.refresh == LoadState.Loading) {
             item {
                 LoadingScreen()
@@ -55,7 +57,7 @@ fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPostClick: (U
         ) { index ->
             val post = lazyPagingItems[index]
             if (post != null) {
-                println("post added to the UI: $post")
+                println("post $index added to the UI: $post")
                 RedditPostCard(post, onPostClick)
             } else {
                 RedditPostCardPlaceholder()
