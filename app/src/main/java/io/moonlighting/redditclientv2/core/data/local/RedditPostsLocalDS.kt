@@ -3,7 +3,8 @@ package io.moonlighting.redditclientv2.core.data.local
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.paging.PagingSource
-import io.moonlighting.redditclientv2.core.data.remote.RedditPostRemote
+import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
+import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
 import javax.inject.Inject
 
 interface RedditPostsLocalDS {

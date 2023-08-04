@@ -1,5 +1,6 @@
 package io.moonlighting.redditclientv2.core.data.local
 
+import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
 import io.moonlighting.redditclientv2.core.data.remote.RedditPostRemote
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -10,7 +11,7 @@ class RedditPostEntityTest {
     fun `constructor from remote initializes properties correctly`() {
         // given
         val redditPostRemote = RedditPostRemote(
-            fullname = "asdasd",
+            fullname = "123fullname",
             title = "Title",
             author = "Author",
             subreddit = "Subreddit",

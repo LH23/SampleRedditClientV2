@@ -1,4 +1,4 @@
-package io.moonlighting.redditclientv2.di
+package io.moonlighting.redditclientv2.app.di
 
 import android.content.Context
 import androidx.room.Room

@@ -6,8 +6,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import io.moonlighting.redditclientv2.core.data.local.RedditPostEntity
 import io.moonlighting.redditclientv2.core.data.local.RedditPostsLocalDS
+import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import io.moonlighting.redditclientv2.core.data.paging.RedditPageMediator
 import io.moonlighting.redditclientv2.core.data.remote.RedditPostsRemoteDS
 import kotlinx.coroutines.flow.Flow
@@ -47,7 +47,7 @@ class RedditClientRepositoryImpl @Inject constructor(
             redditPostsLocalDS.getRedditTopPostsPaging(subreddit)
         }.flow.map { pagingData ->
             pagingData.map { entity ->
-                println("entity ${entity._id} ${entity.title}")
+                println("entity ${entity.gid} ${entity.title}")
                 RedditPost(entity)
             }
         }
@@ -73,21 +73,3 @@ class RedditClientRepositoryFakeImpl : RedditClientRepository {
 }
 
 
-data class RedditPost(
-    val fullname: String,
-    val title: String,
-    val subreddit: String,
-    val author: String,
-    val thumbnail: String,
-    val url: String,
-) {
-    constructor(postEntity: RedditPostEntity) :
-            this(
-                postEntity.fullname,
-                postEntity.title,
-                postEntity.subreddit,
-                postEntity.author,
-                postEntity.thumbnail,
-                postEntity.sourceUrl
-            )
-}

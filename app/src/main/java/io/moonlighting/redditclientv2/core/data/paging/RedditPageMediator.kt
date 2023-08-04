@@ -4,8 +4,8 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import io.moonlighting.redditclientv2.core.data.local.RedditPostEntity
 import io.moonlighting.redditclientv2.core.data.local.RedditPostsLocalDS
+import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
 import io.moonlighting.redditclientv2.core.data.remote.RedditPostsRemoteDS
 import retrofit2.HttpException
 import java.io.IOException

@@ -1,6 +1,7 @@
 package io.moonlighting.redditclientv2.core.data.remote
 
 import android.util.Log
+import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
 import javax.inject.Inject
 
 fun interface RedditPostsRemoteDS {
@@ -38,19 +39,3 @@ class RedditPostsRemoteDSImpl @Inject constructor (
 
 }
 
-data class RedditPostRemote(val fullname: String,
-                            val title: String,
-                            val subreddit: String,
-                            val author: String,
-                            val thumbnail: String,
-                            val url: String,
-) {
-    constructor(jsonPost: RedditPostsJSONResponse.PostsJsonData.JsonPostData.JsonPost) :
-            this(jsonPost.name,
-                jsonPost.title,
-                jsonPost.subredditNamePrefixed,
-                jsonPost.author,
-                jsonPost.thumbnail,
-                jsonPost.url
-            )
-}
