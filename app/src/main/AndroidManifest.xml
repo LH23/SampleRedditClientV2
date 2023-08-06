@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/reddit_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RedditClientV2"
-        android:name=".RedditClientApp"
+        android:name=".app.RedditClientApp"
         android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
         <activity
@@ -22,7 +22,6 @@
             android:theme="@style/Theme.RedditClientV2.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

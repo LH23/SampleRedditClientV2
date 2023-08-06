@@ -3,7 +3,7 @@ package io.moonlighting.redditclientv2.core.data.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import io.moonlighting.redditclientv2.core.data.remote.RedditPostRemote
+import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
 
 @Entity(tableName = "redditposts")
 data class RedditPostEntity(

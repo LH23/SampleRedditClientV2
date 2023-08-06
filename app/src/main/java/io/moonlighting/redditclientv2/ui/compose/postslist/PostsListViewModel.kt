@@ -8,7 +8,6 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
-import io.moonlighting.redditclientv2.core.data.RedditPost
 import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
