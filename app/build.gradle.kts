@@ -117,6 +117,9 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
+    // lint checks
+    lintChecks(libs.slack.compose.lint.checks)
+
 }
 
 kapt {

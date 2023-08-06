@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,7 +38,7 @@ import io.moonlighting.redditclientv2.ui.compose.postslist.UIRedditPost
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPostClick: (UIRedditPost) -> Unit) {
+internal fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPostClick: (UIRedditPost) -> Unit) {
 
     val lazyPagingItems = redditPostsFlow.collectAsLazyPagingItems()
 
@@ -58,7 +57,7 @@ fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPostClick: (U
             val post = lazyPagingItems[index]
             if (post != null) {
                 println("post $index added to the UI: $post")
-                RedditPostCard(post, onPostClick)
+                RedditPostCard(post, Modifier, onPostClick)
             } else {
                 RedditPostCardPlaceholder()
             }
@@ -79,16 +78,22 @@ fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPostClick: (U
 
 
 @Composable
-fun ErrorMessage() {
-    Row(horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically) {
+fun ErrorMessage(
+    modifier : Modifier = Modifier
+) {
+    Row(modifier = modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(text = stringResource(R.string.error_loading_posts))
     }
 }
 
 @Composable
-fun LoadingScreen() {
-    Row(modifier = Modifier.fillMaxWidth().padding(16.dp),
+fun LoadingScreen(
+    modifier : Modifier = Modifier
+) {
+    Row(modifier = modifier.fillMaxWidth().padding(16.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically) {
         CircularProgressIndicator(
@@ -103,8 +108,10 @@ fun LoadingScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RedditPostCardPlaceholder() {
-    ElevatedCard(modifier = Modifier
+fun RedditPostCardPlaceholder(
+    modifier : Modifier = Modifier
+) {
+    ElevatedCard(modifier = modifier
         .fillMaxWidth()
         .height(64.dp),
         onClick = {}
@@ -113,8 +120,11 @@ fun RedditPostCardPlaceholder() {
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun RedditPostCard(post: UIRedditPost, onPostClick: (UIRedditPost) -> Unit) {
-    ElevatedCard(modifier = Modifier
+fun RedditPostCard(post: UIRedditPost,
+                   modifier: Modifier = Modifier,
+                   onPostClick: (UIRedditPost) -> Unit
+) {
+    ElevatedCard(modifier = modifier
         .fillMaxWidth()
         .heightIn(64.dp, 256.dp),
         onClick = {

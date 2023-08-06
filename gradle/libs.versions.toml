@@ -24,6 +24,7 @@ core-splashscreen = "1.0.1"
 mockito-core = "5.4.0"
 room = "2.5.2"
 hilt-navigation-compose = "1.0.0"
+slack-compose-lint-checks = "1.2.0"
 
 [libraries]
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
@@ -64,6 +65,7 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+slack-compose-lint-checks = { module = "com.slack.lint.compose:compose-lint-checks", version.ref = "slack-compose-lint-checks" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

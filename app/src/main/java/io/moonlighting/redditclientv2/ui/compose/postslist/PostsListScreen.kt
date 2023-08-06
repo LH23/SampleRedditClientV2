@@ -16,6 +16,7 @@ import io.moonlighting.redditclientv2.ui.compose.LoadingScreen
 @Composable
 fun PostsListScreen(
     paddingValues: PaddingValues,
+    modifier: Modifier = Modifier,
     postsListViewModel: PostsListViewModel = hiltViewModel()
 ) {
     val uiState by postsListViewModel.uiState.collectAsState(
@@ -23,7 +24,7 @@ fun PostsListScreen(
     )
 
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .padding(paddingValues)
             .fillMaxSize()
     ) {
