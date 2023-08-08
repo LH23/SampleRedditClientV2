@@ -24,6 +24,7 @@ fun RedditClientNavHost(
                 type = NavType.StringType
             })
         ) {
+            // TODO uncomment when added
 //            PostScreen(
 //                onBackClick = { navController.navigateUp() }
 //            )

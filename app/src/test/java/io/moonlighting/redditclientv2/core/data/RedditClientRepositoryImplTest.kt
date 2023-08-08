@@ -1,13 +1,17 @@
 package io.moonlighting.redditclientv2.core.data
 
+import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import androidx.paging.testing.asSnapshot
 import io.moonlighting.redditclientv2.core.data.local.RedditPostsLocalDS
 import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
 import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import io.moonlighting.redditclientv2.core.data.remote.RedditPostsRemoteDS
 import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -50,15 +54,15 @@ class RedditClientRepositoryImplTest {
         `when`(redditPostsLocalDS.getRedditTopPostsPaging("")).thenReturn(listOf(postLocal1, postLocal2).toPagingSource())
         `when`(redditPostsLocalDS.updateRedditLocalPosts(
             redditPostsRemoteDS.getRedditTopPosts("",null,null,10), "", false
-        )
-        ).thenAnswer {
+        )).thenAnswer {
             throw UnsupportedOperationException("updateRedditLocalPosts should not be called when updateFromRemote is false")
         }
+        `when`(redditPostsLocalDS.getCreationTime()).thenReturn(System.currentTimeMillis())
+
 
         val posts = repository.getRedditTopPosts("test",10, refresh = false)
-        posts.collect() {
-            // TODO get it.posts from pagingData to list using TestPager
-            val resultPosts: List<RedditPost> = null!! // it.extractElementsFromPagingData
+        posts.collect() {pagingData ->
+            val resultPosts: List<RedditPost> = pagingData.extractElements()
 
             assertEquals(2, resultPosts.size)
             assertEquals("10", resultPosts[0].fullname)
@@ -72,6 +76,7 @@ class RedditClientRepositoryImplTest {
     fun `getRedditTopPosts should replace local data source from remote`(): Unit = testScope.runTest {
         `when`(redditPostsRemoteDS.getRedditTopPosts("",null,null,10)).thenReturn(listOf(postRemote1, postRemote2))
         `when`(redditPostsLocalDS.getRedditTopPostsPaging("")).thenReturn(listOf(postLocal1, postLocal2).toPagingSource())
+        `when`(redditPostsLocalDS.getCreationTime()).thenReturn(System.currentTimeMillis())
         `when`(redditPostsLocalDS.updateRedditLocalPosts(
             redditPostsRemoteDS.getRedditTopPosts("",null,null,10), "", true
         )).thenAnswer {
@@ -79,9 +84,8 @@ class RedditClientRepositoryImplTest {
         }
 
         val posts = repository.getRedditTopPosts("test",10, refresh = true)
-        posts.collect {
-            // TODO get posts from pagingData to list using TestPager
-            val resultPosts: List<RedditPost> = null!! // it.extractElementsFromPagingData
+        posts.collect { pagingData ->
+            val resultPosts: List<RedditPost> = pagingData.extractElements()
 
             assertEquals(2, resultPosts.size)
             assertEquals("20", resultPosts[0].fullname)
@@ -93,19 +97,26 @@ class RedditClientRepositoryImplTest {
     }
 }
 
+private suspend fun <T : Any> PagingData<T>.extractElements(): List<T> {
+    val items: Flow<PagingData<T>> = flowOf(this)
+    return items.asSnapshot {
+        scrollTo(index = 10)
+    }
+}
+
 private fun List<RedditPostEntity>.toPagingSource(): PagingSource<Int, RedditPostEntity> = TestPagingSource(this)
 
 class TestPagingSource(private val items: List<RedditPostEntity>) : PagingSource<Int, RedditPostEntity>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RedditPostEntity> {
-        try {
+        return try {
             val pageKey = params.key ?: 0
             val startingIndex = pageKey * params.loadSize
             val page = items.subList(startingIndex, startingIndex + params.loadSize)
             val nextPageKey = if ((startingIndex + params.loadSize) < items.size) pageKey + 1 else null
 
-            return LoadResult.Page(data = page, prevKey = null, nextKey = nextPageKey)
+            LoadResult.Page(data = page, prevKey = null, nextKey = nextPageKey)
         } catch (e: Exception) {
-            return LoadResult.Error(e)
+            LoadResult.Error(e)
         }
     }
 

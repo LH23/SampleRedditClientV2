@@ -1,7 +1,7 @@
 package io.moonlighting.redditclientv2.core.data.local
 
 import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
-import io.moonlighting.redditclientv2.core.data.remote.RedditPostRemote
+import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
