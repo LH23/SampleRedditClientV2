@@ -11,7 +11,6 @@ import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import io.moonlighting.redditclientv2.core.data.paging.RedditPageMediator
 import io.moonlighting.redditclientv2.core.data.remote.RedditPostsRemoteDS
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -23,11 +22,11 @@ fun interface RedditClientRepository {
 
 class RedditClientRepositoryImpl @Inject constructor(
     private val redditPostsLocalDS: RedditPostsLocalDS,
-    private val redditPostsRemoteDS: RedditPostsRemoteDS) :
-    RedditClientRepository {
+    private val redditPostsRemoteDS: RedditPostsRemoteDS
+): RedditClientRepository {
 
-    override fun getRedditTopPosts(subreddit: String, pageSize: Int) = getRedditTopPosts(
-        subreddit, pageSize, false)
+    override fun getRedditTopPosts(subreddit: String, pageSize: Int) =
+        getRedditTopPosts(subreddit, pageSize, false)
 
     @OptIn(ExperimentalPagingApi::class)
     @VisibleForTesting
@@ -53,23 +52,4 @@ class RedditClientRepositoryImpl @Inject constructor(
         }
     }
 }
-
-
-class RedditClientRepositoryFakeImpl : RedditClientRepository {
-
-    override fun getRedditTopPosts(subreddit: String, pageSize: Int):
-            Flow<PagingData<RedditPost>> {
-        return flowOf(PagingData.from(fakePosts))
-    }
-
-    companion object {
-        val fakePosts: List<RedditPost> = listOf(
-            RedditPost("1", "Hello im a reddit post1","r/test","u/lio","",""),
-            RedditPost("2", "Hello im a reddit post2","r/test","u/lio","",""),
-            RedditPost("3", "Hello im a reddit post3","r/test","u/lio","",""),
-            RedditPost("4", "Hello im a reddit post4","r/test","u/lio","","")
-        )
-    }
-}
-
 
