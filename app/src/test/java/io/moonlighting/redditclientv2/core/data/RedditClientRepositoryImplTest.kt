@@ -1,37 +1,26 @@
 package io.moonlighting.redditclientv2.core.data
 
+import android.text.method.Touch.scrollTo
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
-import androidx.paging.PagingState
 import androidx.paging.testing.asSnapshot
-import io.moonlighting.redditclientv2.core.data.local.RedditPostsLocalDS
+import io.moonlighting.redditclientv2.core.data.local.FakeRedditPostsLocalDS
 import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
 import io.moonlighting.redditclientv2.core.data.model.RedditPost
-import io.moonlighting.redditclientv2.core.data.remote.RedditPostsRemoteDS
+import io.moonlighting.redditclientv2.core.data.remote.FakeRedditPostsRemoteDS
 import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
 @ExperimentalCoroutinesApi
 class RedditClientRepositoryImplTest {
 
     private lateinit var repository: RedditClientRepositoryImpl
-
-    @Mock
-    private lateinit var redditPostsLocalDS: RedditPostsLocalDS
-
-    @Mock
-    private lateinit var redditPostsRemoteDS: RedditPostsRemoteDS
 
     private val postLocal1 = RedditPostEntity(null, "10","TitleLocal1","","","","")
     private val postLocal2 = RedditPostEntity(null, "11","TitleLocal2","","","","")
@@ -46,82 +35,35 @@ class RedditClientRepositoryImplTest {
     @BeforeEach
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        repository = RedditClientRepositoryImpl(redditPostsLocalDS, redditPostsRemoteDS)
+        val fakeLocalDS = FakeRedditPostsLocalDS(mutableListOf(postLocal1, postLocal2))
+        val fakeRemoteDS = FakeRedditPostsRemoteDS(listOf(postRemote1, postRemote2))
+        repository = RedditClientRepositoryImpl(fakeLocalDS, fakeRemoteDS)
     }
 
     @Test
     fun `getRedditTopPosts should fetch posts from local data source by default`() = testScope.runTest {
-        `when`(redditPostsLocalDS.getRedditTopPostsPaging("")).thenReturn(listOf(postLocal1, postLocal2).toPagingSource())
-        `when`(redditPostsLocalDS.updateRedditLocalPosts(
-            redditPostsRemoteDS.getRedditTopPosts("",null,null,10), "", false
-        )).thenAnswer {
-            throw UnsupportedOperationException("updateRedditLocalPosts should not be called when updateFromRemote is false")
-        }
-        `when`(redditPostsLocalDS.getCreationTime()).thenReturn(System.currentTimeMillis())
 
-
+        // refresh false
         val posts = repository.getRedditTopPosts("test",10, refresh = false)
-        posts.collect() {pagingData ->
-            val resultPosts: List<RedditPost> = pagingData.extractElements()
 
-            assertEquals(2, resultPosts.size)
-            assertEquals("10", resultPosts[0].fullname)
-            assertEquals("TitleLocal1", resultPosts[0].title)
-            assertEquals("11", resultPosts[1].fullname)
-            assertEquals("TitleLocal2", resultPosts[1].title)
+        val resultPosts: List<RedditPost> = posts.asSnapshot {
+            scrollTo(index = 3)
         }
+
+        assertEquals(listOf(postLocal1, postLocal2).map { RedditPost(it) }, resultPosts)
     }
 
     @Test
     fun `getRedditTopPosts should replace local data source from remote`(): Unit = testScope.runTest {
-        `when`(redditPostsRemoteDS.getRedditTopPosts("",null,null,10)).thenReturn(listOf(postRemote1, postRemote2))
-        `when`(redditPostsLocalDS.getRedditTopPostsPaging("")).thenReturn(listOf(postLocal1, postLocal2).toPagingSource())
-        `when`(redditPostsLocalDS.getCreationTime()).thenReturn(System.currentTimeMillis())
-        `when`(redditPostsLocalDS.updateRedditLocalPosts(
-            redditPostsRemoteDS.getRedditTopPosts("",null,null,10), "", true
-        )).thenAnswer {
-            `when`(redditPostsLocalDS.getRedditTopPostsPaging("")).thenReturn(listOf(postLocalRemote1, postLocalRemote2).toPagingSource())
-        }
 
+        // refresh true
         val posts = repository.getRedditTopPosts("test",10, refresh = true)
-        posts.collect { pagingData ->
-            val resultPosts: List<RedditPost> = pagingData.extractElements()
 
-            assertEquals(2, resultPosts.size)
-            assertEquals("20", resultPosts[0].fullname)
-            assertEquals("TitleRemote1", resultPosts[0].title)
-            assertEquals("21",resultPosts[1].fullname)
-            assertEquals("TitleRemote2", resultPosts[1].title)
-
+        val resultPosts: List<RedditPost> = posts.asSnapshot {
+            scrollTo(index = 3)
         }
-    }
-}
 
-private suspend fun <T : Any> PagingData<T>.extractElements(): List<T> {
-    val items: Flow<PagingData<T>> = flowOf(this)
-    return items.asSnapshot {
-        scrollTo(index = 10)
-    }
-}
+        assertEquals(listOf(postLocalRemote1, postLocalRemote1).map { RedditPost(it) }, resultPosts)
 
-private fun List<RedditPostEntity>.toPagingSource(): PagingSource<Int, RedditPostEntity> = TestPagingSource(this)
-
-class TestPagingSource(private val items: List<RedditPostEntity>) : PagingSource<Int, RedditPostEntity>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RedditPostEntity> {
-        return try {
-            val pageKey = params.key ?: 0
-            val startingIndex = pageKey * params.loadSize
-            val page = items.subList(startingIndex, startingIndex + params.loadSize)
-            val nextPageKey = if ((startingIndex + params.loadSize) < items.size) pageKey + 1 else null
-
-            LoadResult.Page(data = page, prevKey = null, nextKey = nextPageKey)
-        } catch (e: Exception) {
-            LoadResult.Error(e)
-        }
-    }
-
-    override fun getRefreshKey(state: PagingState<Int, RedditPostEntity>): Int? {
-        // We simply return the key of the first item in the list.
-        return items.firstOrNull()?.gid
     }
 }
