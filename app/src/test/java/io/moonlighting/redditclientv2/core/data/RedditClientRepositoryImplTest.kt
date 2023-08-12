@@ -1,7 +1,5 @@
 package io.moonlighting.redditclientv2.core.data
 
-import android.text.method.Touch.scrollTo
-import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
 import io.moonlighting.redditclientv2.core.data.local.FakeRedditPostsLocalDS
 import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
