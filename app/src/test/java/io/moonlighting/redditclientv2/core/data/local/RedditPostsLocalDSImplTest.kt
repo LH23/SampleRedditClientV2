@@ -48,75 +48,69 @@ class RedditPostsLocalDSImplTest {
 
         //then
         val result = pagingSource.getPage()
-
-        // Write assertions against the loaded data
         assertEquals(result.data, entityPosts)
     }
 
     @Test
     fun `getRedditTopPostsPaging with no elements returns an empty page`() = runTest {
-        // given the fakeDao is empty (by default)
+        // given
+        // the fakeDao is empty (by default)
 
         //when
         val pagingSource = redditLocalDS.getRedditTopPostsPaging("")
 
         //then
-
-    }
-
-    @Test
-    fun `load Returns the remote API page after refresh`() = runTest {
-        // TODO
-//        val pagingSource = ...
-//        val pager = TestPager(CONFIG, pagingSource)
-//
-//        val result = pager.refresh() as LoadResult.Page
-//
-//        assertThat(result.data)
-//            .containsExactlyElementsIn(mockPosts)
-//            .inOrder()
+        val result = pagingSource.getPage()
+        assertEquals(result.data, emptyList<RedditPostEntity>())
     }
 
     @Test
     fun `updateRedditLocalPosts with refresh false appends them`() = testScope.runTest {
         // given
+        fakeDao.addAll(entityPosts)
+        val expected = entityPosts+remotePosts.map { RedditPostEntity(it) }
 
         //when
         redditLocalDS.updateRedditLocalPosts(remotePosts, "", false)
 
         //then
-
+        val pagingSource = redditLocalDS.getRedditTopPostsPaging("")
+        val result = pagingSource.getPage(size = 20)
+        // check only by fullname because creation time is different
+        assertEquals(expected.map { it.fullname }, result.data.map{ it.fullname })
     }
 
     @Test
     fun `updateRedditLocalPosts with refresh true clears the list before adding them`() = testScope.runTest {
         // given
+        fakeDao.addAll(entityPosts)
+        val expected = remotePosts.map { RedditPostEntity(it) }
 
         //when
         redditLocalDS.updateRedditLocalPosts(remotePosts, "", true)
 
         //then
-
+        val pagingSource = redditLocalDS.getRedditTopPostsPaging("")
+        val result = pagingSource.getPage()
+        assertEquals(expected, result.data)
     }
-
 
     @Test
     fun `remove all saved posts works`() = testScope.runTest {
         // given
+        fakeDao.addAll(entityPosts)
 
         //when
         redditLocalDS.removeAllSavedPosts("")
 
+        // then
         val pagingSource = redditLocalDS.getRedditTopPostsPaging("")
         val result = pagingSource.getPage()
-
-        // then
         assertEquals(result.data, emptyList<RedditPostEntity>())
-
     }
 }
 
-private suspend fun <K : Any, V : Any> PagingSource<K, V>.getPage(): Page {
-    val pager = TestPager(PagingConfig(pageSize = 10), this)
+private suspend fun <K : Any, V : Any> PagingSource<K, V>.getPage(size: Int = 10): Page<K,V> {
+    val pager = TestPager(PagingConfig(pageSize = size), this)
     return pager.refresh() as Page
 }
