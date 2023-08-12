@@ -1,12 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp) apply true
-    kotlin("kapt")
+    alias(libs.plugins.kapt) apply true
     alias(libs.plugins.hilt)
 }
 
@@ -54,11 +53,12 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/gradle/incremental.annotation.processors"
         }
     }
 }
@@ -96,7 +96,9 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.hilt.android)
+    implementation(libs.hilt.android.compiler)
     kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
@@ -108,6 +110,7 @@ dependencies {
     testImplementation(libs.androidx.paging.common)
     testImplementation(libs.androidx.paging.testing)
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.hilt.android.testing)
 
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
