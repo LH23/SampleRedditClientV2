@@ -15,13 +15,14 @@ import java.util.concurrent.TimeUnit
 class RedditPageMediator(
     private val redditPostsLocalDS: RedditPostsLocalDS,
     private val redditPostsRemoteDS: RedditPostsRemoteDS,
-    private val subreddit: String
+    private val subreddit: String,
+    private val refresh: Boolean = false
 ) : RemoteMediator<Int, RedditPostEntity>() {
 
     override suspend fun initialize(): InitializeAction {
         val cacheTimeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
 
-        return if (System.currentTimeMillis() - redditPostsLocalDS.getCreationTime() < cacheTimeout) {
+        return if (!refresh && System.currentTimeMillis() - redditPostsLocalDS.getCreationTime() < cacheTimeout) {
             InitializeAction.SKIP_INITIAL_REFRESH
         } else {
             InitializeAction.LAUNCH_INITIAL_REFRESH

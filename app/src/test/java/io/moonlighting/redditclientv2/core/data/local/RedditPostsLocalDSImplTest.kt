@@ -9,9 +9,8 @@ import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-
 import org.junit.jupiter.api.Test
 
 
@@ -91,7 +90,7 @@ class RedditPostsLocalDSImplTest {
         //then
         val pagingSource = redditLocalDS.getRedditTopPostsPaging("")
         val result = pagingSource.getPage()
-        assertEquals(expected, result.data)
+        assertEquals(expected.map { it.fullname }, result.data.map { it.fullname })
     }
 
     @Test

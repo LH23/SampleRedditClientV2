@@ -41,10 +41,9 @@ class RedditClientRepositoryImpl @Inject constructor(
                 enablePlaceholders = true,
                 initialLoadSize = pageSize*2
             ),
-            remoteMediator = RedditPageMediator(redditPostsLocalDS, redditPostsRemoteDS, subreddit)
-        ) {
-            redditPostsLocalDS.getRedditTopPostsPaging(subreddit)
-        }.flow.map { pagingData ->
+            remoteMediator = RedditPageMediator(redditPostsLocalDS, redditPostsRemoteDS, subreddit, refresh),
+            pagingSourceFactory = { redditPostsLocalDS.getRedditTopPostsPaging(subreddit) }
+        ).flow.map { pagingData ->
             pagingData.map { entity ->
                 println("entity ${entity.gid} ${entity.title}")
                 RedditPost(entity)
