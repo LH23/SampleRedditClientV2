@@ -18,6 +18,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,7 +57,9 @@ internal fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPost
         ) { index ->
             val post = lazyPagingItems[index]
             if (post != null) {
-                println("post $index added to the UI: $post")
+                LaunchedEffect(key1 = post) {
+                    println("post $index added to the UI: $post")
+                }
                 RedditPostCard(post, Modifier, onPostClick)
             } else {
                 RedditPostCardPlaceholder()
@@ -93,7 +96,9 @@ fun ErrorMessage(
 fun LoadingScreen(
     modifier : Modifier = Modifier
 ) {
-    Row(modifier = modifier.fillMaxWidth().padding(16.dp),
+    Row(modifier = modifier
+        .fillMaxWidth()
+        .padding(16.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically) {
         CircularProgressIndicator(

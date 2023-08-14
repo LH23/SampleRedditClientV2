@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,10 +53,9 @@ class MainActivity : ComponentActivity() {
 
             RedditClientV2Theme(useDarkTheme = darkMode) {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RedditClientMainScreen(darkMode, viewModel::toggleDarkMode)
+                    RedditClientMainScreen(darkMode, Modifier, viewModel::toggleDarkMode)
                 }
             }
         }
@@ -66,8 +64,13 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RedditClientMainScreen(darkMode: Boolean, toggleDarkMode: () -> Unit) {
+fun RedditClientMainScreen(
+    darkMode: Boolean,
+    modifier: Modifier = Modifier,
+    toggleDarkMode: () -> Unit
+) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             Surface (shadowElevation = 4.dp){
                 TopAppBar(
