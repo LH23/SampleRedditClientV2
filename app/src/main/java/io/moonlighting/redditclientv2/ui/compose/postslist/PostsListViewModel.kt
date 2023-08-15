@@ -53,6 +53,7 @@ class PostsListViewModel @Inject constructor (
     }
 
     fun onPostClick(post: UIRedditPost) {
+        // UNUSED
         Log.d(TAG, "Clicked post: $post")
     }
 

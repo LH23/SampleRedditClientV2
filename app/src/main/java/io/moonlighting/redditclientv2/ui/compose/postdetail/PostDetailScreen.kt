@@ -1,9 +1,10 @@
-package io.moonlighting.redditclientv2.ui.compose.postslist
+package io.moonlighting.redditclientv2.ui.compose.postdetail
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,16 +13,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import io.moonlighting.redditclientv2.ui.compose.ErrorMessage
 import io.moonlighting.redditclientv2.ui.compose.ListOfPosts
 import io.moonlighting.redditclientv2.ui.compose.LoadingScreen
+import io.moonlighting.redditclientv2.ui.compose.postslist.PostsListUiState
+import io.moonlighting.redditclientv2.ui.compose.postslist.PostsListViewModel
 
 @Composable
-fun PostsListScreen(
+fun PostDetailScreen(
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    postsListViewModel: PostsListViewModel = hiltViewModel(),
-    onPostItemClick: (UIRedditPost) -> Unit
+    postDetailViewModel: PostDetailViewModel = hiltViewModel(),
+    onBackClick: () -> Boolean
 ) {
-    val uiState by postsListViewModel.uiState.collectAsState(
-        initial = PostsListUiState(loading = true)
+    val uiState by postDetailViewModel.uiState.collectAsState(
+        initial = PostDetailUiState()
     )
 
     Surface(
@@ -30,14 +33,14 @@ fun PostsListScreen(
             .fillMaxSize()
     ) {
         when {
-            uiState.loading -> {
-                LoadingScreen()
+            uiState.redditPost != null -> {
+                Text(uiState.redditPost!!.title)
+                // image post
+                // video post
+                // url post
             }
-            uiState.error != null -> {
-                ErrorMessage()
-            } // TODO pass the error message or add an errortype enum
             else -> {
-                ListOfPosts(uiState.redditPostsFlow, onPostItemClick)
+                // error message
             }
         }
     }
