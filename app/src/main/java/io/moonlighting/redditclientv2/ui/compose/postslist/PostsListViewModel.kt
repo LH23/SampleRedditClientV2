@@ -40,16 +40,21 @@ class PostsListViewModel @Inject constructor (
     }
 
     private fun syncRepo() {
-        _uiState.value = PostsListUiState(
-            redditPostsFlow = repository.getRedditTopPosts(DEFAULT_SUBREDDIT, PAGE_SIZE)
-                .map { pagingData ->
-                    pagingData.map { post ->
-                        println("ui post: $post")
-                        UIRedditPost(post)
-                    }
-                }.cachedIn(viewModelScope),
-            loading = false
-        )
+        try {
+            _uiState.value = PostsListUiState(
+                redditPostsFlow = repository.getRedditTopPosts(DEFAULT_SUBREDDIT, PAGE_SIZE)
+                    .map { pagingData ->
+                        pagingData.map { post ->
+                            println("ui post: $post")
+                            UIRedditPost(post)
+                        }
+                    }.cachedIn(viewModelScope),
+                loading = false
+            )
+        } catch (e: Exception) {
+            _uiState.value = PostsListUiState(error = e.message ?: "Error")
+        }
+
     }
 
     fun onPostClick(post: UIRedditPost) {
