@@ -9,6 +9,8 @@ import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
 import io.moonlighting.redditclientv2.core.data.model.RedditPost
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostsListViewModel @Inject constructor (
-    private val repository: RedditClientRepository
+    private val repository: RedditClientRepository,
+    dispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {
     companion object {
         private const val TAG = "PostsListViewModel"
@@ -34,7 +37,7 @@ class PostsListViewModel @Inject constructor (
     val uiState: StateFlow<PostsListUiState> = _uiState
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             syncRepo()
         }
     }
@@ -54,7 +57,6 @@ class PostsListViewModel @Inject constructor (
         } catch (e: Exception) {
             _uiState.value = PostsListUiState(error = e.message ?: "Error")
         }
-
     }
 
     fun onPostClick(post: UIRedditPost) {

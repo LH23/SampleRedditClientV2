@@ -1,6 +1,8 @@
 package io.moonlighting.redditclientv2.app.di
 
 import android.content.Context
+import androidx.annotation.MainThread
+import androidx.annotation.WorkerThread
 import androidx.room.Room
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -12,15 +14,22 @@ import dagger.hilt.components.SingletonComponent
 import io.moonlighting.redditclientv2.core.data.local.RedditDatabase
 import io.moonlighting.redditclientv2.core.data.local.RedditPostsDao
 import io.moonlighting.redditclientv2.core.data.remote.RedditApiService
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Named
+import javax.inject.Singleton
 
 private const val REDDIT_API_ENDPOINT = "https://www.reddit.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RedditAppModule {
+
+    @Provides
+    fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Provides
     fun provideRedditApi(): RedditApiService {
