@@ -111,6 +111,7 @@ dependencies {
     testImplementation(libs.androidx.paging.testing)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.turbine)
 
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
