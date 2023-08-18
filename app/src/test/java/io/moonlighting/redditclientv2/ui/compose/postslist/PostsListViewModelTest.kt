@@ -1,24 +1,33 @@
 package io.moonlighting.redditclientv2.ui.compose.postslist
 
+import android.util.Log
 import androidx.paging.PagingData
-import androidx.paging.testing.asSnapshot
+import androidx.paging.map
 import app.cash.turbine.test
-import io.moonlighting.redditclientv2.core.data.RedditClientRepository
+import app.cash.turbine.testIn
+import app.cash.turbine.turbineScope
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl.Companion.errorMessage
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl.Companion.fakePosts
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class PostsListViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
@@ -28,6 +37,7 @@ class PostsListViewModelTest {
 
     @BeforeEach
     fun setup() {
+        Dispatchers.setMain(testDispatcher)
         repository = RedditClientRepositoryFakeImpl()
     }
 
@@ -39,16 +49,20 @@ class PostsListViewModelTest {
         val uiPosts = fakePosts.map { UIRedditPost(it) }
         val expected = PostsListUiState(redditPostsFlow = flowOf(PagingData.from(uiPosts)))
 
-        // When & Then
         val viewModel = PostsListViewModel(repository, testDispatcher)
+
+        // When & Then
         viewModel.uiState.test {
             assertEquals(loading, awaitItem())
-            assertEquals( // TODO fix this test assert
-                expected.redditPostsFlow,
-                awaitItem().redditPostsFlow
+
+            Log.d("test", "hola "+expected.redditPostsFlow.toList())
+            Log.d("test", "chau "+viewModel.uiState.value.redditPostsFlow.toList())
+            assertEquals(
+                expected.redditPostsFlow.toList(),
+                awaitItem().redditPostsFlow.toList()
             )
-            awaitComplete()
         }
+
     }
 
     @Test
@@ -64,5 +78,10 @@ class PostsListViewModelTest {
             assertEquals(loading, awaitItem())
             assertEquals(expected, awaitItem())
         }
+    }
+
+    @AfterEach
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 }

@@ -53,7 +53,7 @@ class RedditClientRepositoryImplTest {
 
     @Test
     fun `getRedditTopPosts should replace local data source from remote`(): Unit = testScope.runTest {
-
+        // TODO test failing, because getRedditTopPosts does not refresh local list as required
         // refresh true
         val posts = repository.getRedditTopPosts("test",10, refresh = true)
 
@@ -61,7 +61,7 @@ class RedditClientRepositoryImplTest {
             scrollTo(index = 3)
         }
 
-        assertEquals(listOf(postLocalRemote1, postLocalRemote1).map { RedditPost(it) }, resultPosts)
+        assertEquals(listOf(postLocalRemote1, postLocalRemote2).map { RedditPost(it) }, resultPosts)
 
     }
 }
