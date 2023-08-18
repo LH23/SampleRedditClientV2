@@ -15,10 +15,10 @@ This is a sample Reddit client app developed to demonstrate the use of modern An
 - [x] **Flow:** Utilizing Kotlin's Flow to handle asynchronous data streams in a reactive manner.
 - [x] **Jetpack Compose:** Embracing Jetpack Compose for building a modern, declarative user interface.
 - [x] **Paging Lib (Custom Load):** Implementing custom loading with the Paging library for efficient pagination and smooth user experience.
-- [ ] **Navigation:** Implementing the Navigation component for navigation within the app.
+- [ ] **Compose Navigation:** Using Compose Navigation component for navigating within the app.
 - [ ] **Material3 and Dark Mode:** Incorporating Material3 design guidelines for a modern user interface. Additionally, supporting Dark Mode and MaterialYou for enhanced user experience.
 - [ ] **Unit Testing/Compose Testing:** Writing comprehensive unit tests and Compose UI tests to ensure code correctness and quality.
-- [ ] **Jetpack DataStore:** Using Jetpack DataStore for easy data storage.
+- [ ] **Jetpack DataStore:** Using Jetpack DataStore for preferences storage.
 
 ## License
 
