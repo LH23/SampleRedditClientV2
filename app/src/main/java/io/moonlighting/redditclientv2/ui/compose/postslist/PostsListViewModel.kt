@@ -11,7 +11,6 @@ import io.moonlighting.redditclientv2.core.data.RedditClientRepository
 import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

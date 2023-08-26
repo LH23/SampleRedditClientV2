@@ -9,10 +9,12 @@ import app.cash.turbine.turbineScope
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl.Companion.errorMessage
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl.Companion.fakePosts
+import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -48,21 +50,31 @@ class PostsListViewModelTest {
         val loading = PostsListUiState(loading=true)
         val uiPosts = fakePosts.map { UIRedditPost(it) }
         val expected = PostsListUiState(redditPostsFlow = flowOf(PagingData.from(uiPosts)))
+        Log.d("test", "expected "+expected.redditPostsFlow.toList())
 
-        val viewModel = PostsListViewModel(repository, testDispatcher)
+        val results = mutableListOf<PagingData<UIRedditPost>>()
 
         // When & Then
-        viewModel.uiState.test {
-            assertEquals(loading, awaitItem())
+        turbineScope {
+            val viewModel = PostsListViewModel(repository, testDispatcher)
 
-            Log.d("test", "hola "+expected.redditPostsFlow.toList())
-            Log.d("test", "chau "+viewModel.uiState.value.redditPostsFlow.toList())
-            assertEquals(
-                expected.redditPostsFlow.toList(),
-                awaitItem().redditPostsFlow.toList()
-            )
+            val turbine = viewModel.uiState.testIn(backgroundScope)
+            assertEquals(loading, turbine.awaitItem())
+            Log.d("test", "paso el loading ${viewModel.uiState}")
+
+            (viewModel.uiState).test {
+                this.awaitItem().redditPostsFlow.toList(results)
+                Log.d("test", "results $results")
+                this.awaitItem().redditPostsFlow.toList(results)
+                Log.d("test", "results2 $results")
+            }
         }
 
+        assertEquals(
+            expected.redditPostsFlow.toList(),
+            results
+        )
+        Log.d("test", "paso el expected actual")
     }
 
     @Test

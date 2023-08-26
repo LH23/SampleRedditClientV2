@@ -10,11 +10,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import io.moonlighting.redditclientv2.ui.compose.ErrorMessage
-import io.moonlighting.redditclientv2.ui.compose.ListOfPosts
-import io.moonlighting.redditclientv2.ui.compose.LoadingScreen
-import io.moonlighting.redditclientv2.ui.compose.postslist.PostsListUiState
-import io.moonlighting.redditclientv2.ui.compose.postslist.PostsListViewModel
 
 @Composable
 fun PostDetailScreen(
