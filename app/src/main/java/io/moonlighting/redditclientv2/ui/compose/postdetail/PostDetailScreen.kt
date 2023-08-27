@@ -27,15 +27,15 @@ fun PostDetailScreen(
             .padding(paddingValues)
             .fillMaxSize()
     ) {
-        when {
-            uiState.redditPost != null -> {
-                Text(uiState.redditPost!!.title)
+        when (uiState.redditPost) {
+            null -> {
+               // error message
+            }
+            else -> {
+               Text(uiState.redditPost!!.title)
                 // image post
                 // video post
                 // url post
-            }
-            else -> {
-                // error message
             }
         }
     }
