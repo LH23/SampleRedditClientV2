@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import io.moonlighting.redditclientv2.ui.compose.postdetail.PostDetailScreen
 import io.moonlighting.redditclientv2.ui.compose.postslist.PostsListScreen
+import io.moonlighting.redditclientv2.ui.navigation.Routes.ARGUMENT_POST_FULLNAME
 
 @Composable
 fun RedditClientNavHost(
@@ -18,15 +19,12 @@ fun RedditClientNavHost(
     NavHost(navController = navController, startDestination = Routes.POSTS_LIST) {
         composable(Routes.POSTS_LIST) {
             PostsListScreen(
-                paddingValues,
-            ) {
-                navController.navigate(Routes.getPostDetail(it.fullname))
-            }
+                paddingValues = paddingValues,
+                onPostItemClick = { navController.navigate(Routes.getPostDetail(it.fullname)) }
+            )
         }
         composable(Routes.getPostDetail("{postFullname}"),
-            arguments = listOf(navArgument("postFullname") {
-                type = NavType.StringType
-            })
+            arguments = listOf(navArgument(ARGUMENT_POST_FULLNAME) { type = NavType.StringType })
         ) {
             PostDetailScreen(
                 paddingValues = paddingValues,
