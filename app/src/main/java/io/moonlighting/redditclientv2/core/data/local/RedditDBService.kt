@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
 import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RedditPostsDao {
@@ -23,6 +24,9 @@ interface RedditPostsDao {
 
     @Query("SELECT created_at FROM redditposts ORDER BY created_at DESC LIMIT 1")
     suspend fun getCreationTime(): Long?
+
+    @Query("SELECT * FROM redditposts WHERE fullname= :fullname")
+    fun redditPost(fullname: String): Flow<RedditPostEntity>
 }
 
 @Database(entities = [RedditPostEntity::class], version = 1)

@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.paging.PagingSource
 import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
+import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 interface RedditPostsLocalDS {
@@ -13,6 +15,7 @@ interface RedditPostsLocalDS {
     @WorkerThread suspend fun updateRedditLocalPosts(posts: List<RedditPostRemote>, subreddit: String, refresh: Boolean)
     @WorkerThread suspend fun removeAllSavedPosts(subreddit: String)
     @WorkerThread suspend fun getCreationTime(): Long
+    @WorkerThread fun getRedditPost(fullname: String): Flow<RedditPostEntity>
 
 }
 
@@ -42,5 +45,8 @@ class RedditPostsLocalDSImpl @Inject constructor(
     @WorkerThread
     override suspend fun getCreationTime() = redditDAO.getCreationTime()?: 0
 
+    @WorkerThread
+    override fun getRedditPost(fullname: String) =
+        redditDAO.redditPost(fullname)
 
 }
