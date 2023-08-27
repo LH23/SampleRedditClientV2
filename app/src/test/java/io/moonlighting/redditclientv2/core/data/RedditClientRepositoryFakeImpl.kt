@@ -10,6 +10,7 @@ import androidx.paging.testing.asPagingSourceFactory
 import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onEach
 
 class RedditClientRepositoryFakeImpl: RedditClientRepository {
 
@@ -33,7 +34,6 @@ class RedditClientRepositoryFakeImpl: RedditClientRepository {
                 enablePlaceholders = true
             ),
             pagingSourceFactory = {
-                println("pagingSourceFactory created with $posts")
                 posts.asPagingSourceFactory().invoke()
             }
         ).flow

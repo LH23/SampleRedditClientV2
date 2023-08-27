@@ -45,7 +45,6 @@ class RedditClientRepositoryImpl @Inject constructor(
             pagingSourceFactory = { redditPostsLocalDS.getRedditTopPostsPaging(subreddit) }
         ).flow.map { pagingData ->
             pagingData.map { entity ->
-                println("entity ${entity.gid} ${entity.title}")
                 RedditPost(entity)
             }
         }

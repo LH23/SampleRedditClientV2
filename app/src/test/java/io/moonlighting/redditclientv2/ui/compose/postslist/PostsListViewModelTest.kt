@@ -2,25 +2,17 @@ package io.moonlighting.redditclientv2.ui.compose.postslist
 
 import android.util.Log
 import androidx.paging.PagingData
-import androidx.paging.map
+import androidx.paging.testing.asSnapshot
 import app.cash.turbine.test
-import app.cash.turbine.testIn
 import app.cash.turbine.turbineScope
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl.Companion.errorMessage
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl.Companion.fakePosts
-import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -48,33 +40,28 @@ class PostsListViewModelTest {
         // Given
         repository.addFakePosts(fakePosts)
         val loading = PostsListUiState(loading=true)
-        val uiPosts = fakePosts.map { UIRedditPost(it) }
-        val expected = PostsListUiState(redditPostsFlow = flowOf(PagingData.from(uiPosts)))
-        Log.d("test", "expected "+expected.redditPostsFlow.toList())
+        val expected = fakePosts.map { UIRedditPost(it) }
 
-        val results = mutableListOf<PagingData<UIRedditPost>>()
+        val results = mutableListOf<UIRedditPost>()
 
-        // When & Then
+        // When
         turbineScope {
             val viewModel = PostsListViewModel(repository, testDispatcher)
-
             val turbine = viewModel.uiState.testIn(backgroundScope)
             assertEquals(loading, turbine.awaitItem())
-            Log.d("test", "paso el loading ${viewModel.uiState}")
-
-            (viewModel.uiState).test {
-                this.awaitItem().redditPostsFlow.toList(results)
-                Log.d("test", "results $results")
-                this.awaitItem().redditPostsFlow.toList(results)
-                Log.d("test", "results2 $results")
-            }
+            turbine.awaitItem()
+            results.addAll(
+                viewModel.uiState.value.redditPostsFlow.asSnapshot {
+                    scrollTo(index = 4)
+                }
+            )
         }
 
+        // then
         assertEquals(
-            expected.redditPostsFlow.toList(),
+            expected,
             results
         )
-        Log.d("test", "paso el expected actual")
     }
 
     @Test
