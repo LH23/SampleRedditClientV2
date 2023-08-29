@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -79,17 +80,37 @@ data class UIRedditPost(
     val fullname: String,
     val title: String,
     val subredditPrefixed: String,
+    val subredditIconUrl: String,
     val authorPrefixed: String,
     val thumbnail: String,
     val url: String,
+    val type: RedditPostType,
+    val creationDateFormatted: String
     ) {
+
+
     constructor(post: RedditPost) : this(
         post.fullname,
         post.title,
         post.subreddit,
+        "", //TODO get subreddit icon
         "u/"+post.author,
         post.thumbnail.replace("&amp;","&"),
-        post.url
+        post.url,
+        RedditPostType.IMAGE_POST,
+        formatDate(post.creationDate)
     )
+}
+
+fun formatDate(creationDate: Date): String {
+    // TODO this...
+    return creationDate.toString()
+}
+
+enum class RedditPostType {
+    IMAGE_POST,
+    VIDEO_POST,
+    WEB_POST,
+    TEXT_POST
 }
 
