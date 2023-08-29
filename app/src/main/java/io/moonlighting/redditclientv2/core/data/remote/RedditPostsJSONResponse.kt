@@ -17,7 +17,7 @@ data class RedditPostsJSONResponse(@Json(name = "data") val data: PostsJsonData)
                 @Json(name = "thumbnail") val thumbnail: String,
                 @Json(name = "num_comments") val numComments: Int,
                 @Json(name = "url") val url: String,
-                @Json(name = "preview") val preview: Preview?
+                @Json(name = "preview") val preview: Preview?,
             ) {
                 class Preview(@Json(name = "images") val images: List<Image>) {
                     class Image(@Json(name = "source") val source: Source) {

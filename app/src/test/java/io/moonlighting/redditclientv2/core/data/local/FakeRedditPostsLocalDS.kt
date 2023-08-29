@@ -27,6 +27,6 @@ class FakeRedditPostsLocalDS(
         fakeData.clear()
 
     override suspend fun getCreationTime(): Long =
-        fakeData.minBy { it.createdAt }.createdAt
+        fakeData.minBy { it.createdLocallyAt }.createdLocallyAt
 
 }

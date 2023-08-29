@@ -8,13 +8,16 @@ data class RedditPostRemote(val fullname: String,
                             val author: String,
                             val thumbnail: String,
                             val url: String,
+                            val createdUtc: Long,
 ) {
+
     constructor(jsonPost: RedditPostsJSONResponse.PostsJsonData.JsonPostData.JsonPost) :
             this(jsonPost.name,
                 jsonPost.title,
                 jsonPost.subredditNamePrefixed,
                 jsonPost.author,
                 jsonPost.thumbnail,
-                jsonPost.url
+                jsonPost.url,
+                jsonPost.createdUtc
             )
 }

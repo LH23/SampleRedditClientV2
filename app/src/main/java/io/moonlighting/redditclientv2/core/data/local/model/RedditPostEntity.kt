@@ -21,9 +21,12 @@ data class RedditPostEntity(
     val thumbnail: String,
     @ColumnInfo(name = "sourceUrl")
     val sourceUrl: String,
+    @ColumnInfo(name = "createdUtc")
+    val createdUtc: Long,
     @ColumnInfo(name = "created_at")
-    val createdAt: Long = System.currentTimeMillis()
+    val createdLocallyAt: Long = System.currentTimeMillis()
 ) {
+
     constructor(redditPostRemote: RedditPostRemote) : this(
         null,
         redditPostRemote.fullname,
@@ -31,6 +34,7 @@ data class RedditPostEntity(
         redditPostRemote.author,
         redditPostRemote.subreddit,
         redditPostRemote.thumbnail,
-        redditPostRemote.url
+        redditPostRemote.url,
+        redditPostRemote.createdUtc
     )
 }

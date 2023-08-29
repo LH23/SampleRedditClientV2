@@ -17,7 +17,7 @@ class FakeDao(
 
     override suspend fun getCreationTime(): Long? {
         return if (fakeData.isEmpty()) null
-            else fakeData.minBy { it.createdAt }.createdAt
+            else fakeData.minBy { it.createdLocallyAt }.createdLocallyAt
     }
 
 }
