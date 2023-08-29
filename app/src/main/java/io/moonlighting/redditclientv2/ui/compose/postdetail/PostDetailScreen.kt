@@ -9,7 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import io.moonlighting.redditclientv2.R
+import io.moonlighting.redditclientv2.ui.compose.ErrorMessage
 
 @Composable
 fun PostDetailScreen(
@@ -29,7 +32,7 @@ fun PostDetailScreen(
     ) {
         when (uiState.redditPost) {
             null -> {
-               // error message
+                ErrorMessage(stringResource(R.string.error_post_not_found))
             }
             else -> {
                Text(uiState.redditPost!!.title)

@@ -8,7 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import io.moonlighting.redditclientv2.R
 import io.moonlighting.redditclientv2.ui.compose.ErrorMessage
 import io.moonlighting.redditclientv2.ui.compose.ListOfPosts
 import io.moonlighting.redditclientv2.ui.compose.LoadingScreen
@@ -34,7 +36,7 @@ fun PostsListScreen(
                 LoadingScreen()
             }
             uiState.error != null -> {
-                ErrorMessage()
+                ErrorMessage(stringResource(R.string.error_loading_posts))
             } // TODO pass the error message or add an errortype enum
             else -> {
                 ListOfPosts(uiState.redditPostsFlow, onPostItemClick)

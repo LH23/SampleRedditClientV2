@@ -82,13 +82,14 @@ internal fun ListOfPosts(redditPostsFlow: Flow<PagingData<UIRedditPost>>, onPost
 
 @Composable
 fun ErrorMessage(
+    error: String,
     modifier : Modifier = Modifier
 ) {
     Row(modifier = modifier,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = stringResource(R.string.error_loading_posts))
+        Text(text = error)
     }
 }
 

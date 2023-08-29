@@ -4,4 +4,6 @@
     <string name="loading">Loading…</string>
     <string name="error_loading_posts">Error loading posts from Reddit</string>
     <string name="menu_toggle_dark_mode">Toggle Dark Mode</string>
+    <string name="error_invalid_post">Invalid Post Type</string>
+    <string name="error_post_not_found">Post Not Found</string>
 </resources>
