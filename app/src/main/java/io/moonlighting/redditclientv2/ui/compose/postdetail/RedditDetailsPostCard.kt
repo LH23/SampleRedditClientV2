@@ -58,7 +58,7 @@ fun PostCardHeader(post: UIRedditPost, modifier: Modifier = Modifier) {
             SubredditName(text = post.subredditPrefixed, size = 12)
             AuthorName(text = post.authorPrefixed, size = 12)
         }
-        SubredditName(text = post.creationDateFormatted, size = 12, modifier = Modifier.padding(4.dp))
+        SubredditName(text = post.creationDateFormatted, size = 12, modifier = Modifier.padding(8.dp))
     }
 }
 
@@ -70,7 +70,7 @@ fun SubredditIcon(iconUrl: String, modifier: Modifier = Modifier) {
         contentScale = ContentScale.Crop,
         modifier = modifier
             .size(56.dp)
-            .padding(4.dp),
+            .padding(8.dp),
         contentDescription = null
     )
 }
