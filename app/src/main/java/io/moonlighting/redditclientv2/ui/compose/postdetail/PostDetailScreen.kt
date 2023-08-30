@@ -35,7 +35,7 @@ fun PostDetailScreen(
                 ErrorMessage(stringResource(R.string.error_post_not_found))
             }
             else -> {
-               Text(uiState.redditPost!!.title)
+                RedditDetailsPostCard(uiState.redditPost!!)
                 // image post
                 // video post
                 // url post
