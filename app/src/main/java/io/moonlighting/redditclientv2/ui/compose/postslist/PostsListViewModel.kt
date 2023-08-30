@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import javax.inject.Inject
 
@@ -102,9 +104,9 @@ data class UIRedditPost(
     )
 }
 
-fun formatDate(creationDate: Date): String {
-    // TODO this...
-    return creationDate.toString()
+fun formatDate(creationDate: LocalDate): String {
+    var formatter = DateTimeFormatter.ofPattern("MMM dd")
+    return creationDate.format(formatter)
 }
 
 enum class RedditPostType {
