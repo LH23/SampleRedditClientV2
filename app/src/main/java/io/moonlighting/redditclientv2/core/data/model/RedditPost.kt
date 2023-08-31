@@ -1,7 +1,6 @@
 package io.moonlighting.redditclientv2.core.data.model
 
 import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
-import java.time.LocalDate
 import java.util.Date
 
 data class RedditPost(
@@ -11,9 +10,8 @@ data class RedditPost(
     val author: String,
     val thumbnail: String,
     val url: String,
-    val creationDate: LocalDate,
+    val creationDate: Date,
 ) {
-
 
     constructor(postEntity: RedditPostEntity) :
             this(
@@ -23,6 +21,6 @@ data class RedditPost(
                 postEntity.author,
                 postEntity.thumbnail,
                 postEntity.sourceUrl,
-                LocalDate.ofEpochDay(postEntity.createdUtc)
+                Date(postEntity.createdUtc*1000)
             )
 }

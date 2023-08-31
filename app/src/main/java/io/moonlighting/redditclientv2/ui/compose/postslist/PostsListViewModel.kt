@@ -17,9 +17,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -104,9 +106,9 @@ data class UIRedditPost(
     )
 }
 
-fun formatDate(creationDate: LocalDate): String {
-    var formatter = DateTimeFormatter.ofPattern("MMM dd")
-    return creationDate.format(formatter)
+fun formatDate(creationDate: Date): String {
+    val formatter = SimpleDateFormat("MMM dd HH:mm", Locale.US)
+    return formatter.format(creationDate)
 }
 
 enum class RedditPostType {
