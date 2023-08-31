@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.paging.PagingSource
 import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
-import io.moonlighting.redditclientv2.core.data.model.RedditPost
 import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
