@@ -1,7 +1,10 @@
 package io.moonlighting.redditclientv2.ui.navigation
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -16,6 +19,8 @@ fun RedditClientNavHost(
     paddingValues: PaddingValues,
     navController: NavHostController
 ) {
+    val context = LocalContext.current
+
     NavHost(navController = navController, startDestination = Routes.POSTS_LIST) {
         composable(Routes.POSTS_LIST) {
             PostsListScreen(
@@ -28,7 +33,11 @@ fun RedditClientNavHost(
         ) {
             PostDetailScreen(
                 paddingValues = paddingValues,
-                onBackClick = { navController.navigateUp() }
+                onOpenRedditLink = { redditUrl ->
+                    println("opening redditUrl $redditUrl")
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(redditUrl))
+                    context.startActivity(intent)
+                }
             )
         }
     }

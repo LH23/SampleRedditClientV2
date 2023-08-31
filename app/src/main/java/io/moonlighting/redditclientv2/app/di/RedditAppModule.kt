@@ -18,11 +18,13 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-private const val REDDIT_API_ENDPOINT = "https://www.reddit.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RedditAppModule {
+
+    internal const val REDDIT_API_ENDPOINT = "https://www.reddit.com/"
+    internal const val REDDIT_MOBILE_ENDPOINT = "https://m.reddit.com"
 
     @Provides
     fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main

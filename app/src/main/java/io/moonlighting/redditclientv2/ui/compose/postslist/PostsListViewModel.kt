@@ -88,6 +88,7 @@ data class UIRedditPost(
     val authorPrefixed: String,
     val thumbnail: String,
     val url: String,
+    val redditLink: String,
     val type: RedditPostType,
     val creationDateFormatted: String
     ) {
@@ -101,6 +102,7 @@ data class UIRedditPost(
         "u/"+post.author,
         post.thumbnail.replace("&amp;","&"),
         post.url,
+        post.redditLink,
         RedditPostType.IMAGE_POST,
         formatDate(post.creationDate)
     )
