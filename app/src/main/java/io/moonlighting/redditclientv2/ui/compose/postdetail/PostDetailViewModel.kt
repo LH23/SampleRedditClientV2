@@ -47,6 +47,26 @@ class PostDetailViewModel @Inject constructor (
         }
 
     }
+
+    fun savePost() {
+        // TODO
+    }
+
+    fun sharePost() {
+        // TODO
+    }
+
+    private val _redditLinkState: MutableStateFlow<String?> = MutableStateFlow(null)
+    val redditLinkState: StateFlow<String?> = _redditLinkState
+
+    fun openPost() {
+        _redditLinkState.value = _uiState.value.redditPost?.redditLink
+    }
+
+    fun onLinkOpenComplete() {
+        _redditLinkState.value = null
+    }
+
 }
 
 data class PostDetailUiState (
