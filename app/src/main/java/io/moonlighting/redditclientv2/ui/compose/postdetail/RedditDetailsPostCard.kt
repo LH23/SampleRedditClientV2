@@ -31,6 +31,9 @@ import io.moonlighting.redditclientv2.ui.compose.postslist.UIRedditPost
 
 @Composable
 fun RedditDetailsPostCard(post: UIRedditPost,
+                          savePost: () -> Unit,
+                          sharePost: () -> Unit,
+                          openPost: () -> Unit,
                           modifier: Modifier = Modifier
 ) {
     ElevatedCard(modifier = modifier
@@ -45,7 +48,7 @@ fun RedditDetailsPostCard(post: UIRedditPost,
 //                TEXT_POST -> {}
                 else -> { ErrorMessage(stringResource(R.string.error_invalid_post)) }
             }
-            PostCardFooter(post)
+            PostCardFooter(savePost, sharePost, openPost)
         }
     }
 }
@@ -90,14 +93,19 @@ fun FullSizedImage(imageUrl: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PostCardFooter(post: UIRedditPost, modifier: Modifier = Modifier) {
+fun PostCardFooter(
+        savePost: () -> Unit,
+        sharePost: () -> Unit,
+        openPost: () -> Unit,
+        modifier: Modifier = Modifier
+) {
     Row (
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ){
-        Button(content = { Text("Share") }, onClick = {})
-        Button(content = { Text("Save") }, onClick = {})
-        Button(content = { Text("Open") }, onClick = {})
+        Button(content = { Text("Share") }, onClick = { savePost() })
+        Button(content = { Text("Save") }, onClick = { sharePost() })
+        Button(content = { Text("Open") }, onClick = { openPost() })
     }
 }
 
@@ -105,5 +113,5 @@ fun PostCardFooter(post: UIRedditPost, modifier: Modifier = Modifier) {
 @Composable
 fun RedditPostCardPreview() {
     val post = fakePost
-    RedditDetailsPostCard(post)
+    RedditDetailsPostCard(post, {}, {}, {})
 }

@@ -21,6 +21,8 @@ data class RedditPostEntity(
     val thumbnail: String,
     @ColumnInfo(name = "sourceUrl")
     val sourceUrl: String,
+    @ColumnInfo(name = "redditLink")
+    val redditLink: String,
     @ColumnInfo(name = "createdUtc")
     val createdUtc: Long,
     @ColumnInfo(name = "created_at")
@@ -35,6 +37,7 @@ data class RedditPostEntity(
         redditPostRemote.subreddit,
         redditPostRemote.thumbnail,
         redditPostRemote.url,
+        redditPostRemote.redditLink,
         redditPostRemote.createdUtc
     )
 }

@@ -10,6 +10,7 @@ data class RedditPost(
     val author: String,
     val thumbnail: String,
     val url: String,
+    val redditLink: String,
     val creationDate: Date,
 ) {
 
@@ -21,6 +22,7 @@ data class RedditPost(
                 postEntity.author,
                 postEntity.thumbnail,
                 postEntity.sourceUrl,
+                postEntity.redditLink,
                 Date(postEntity.createdUtc*1000)
             )
 }

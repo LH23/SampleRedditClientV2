@@ -82,6 +82,7 @@ val fakePost = UIRedditPost(
     "u/lio23",
     "https://freeiconshop.com/wp-content/uploads/edd/reddit-flat.png",
     "https://freeiconshop.com/icon/reddit-icon-flat/",
+    "https://reddit.com",
     RedditPostType.IMAGE_POST,
     "12/8/2023 03:55pm"
 )

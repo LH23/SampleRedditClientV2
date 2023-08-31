@@ -1,5 +1,6 @@
 package io.moonlighting.redditclientv2.core.data.remote.model
 
+import io.moonlighting.redditclientv2.app.di.RedditAppModule
 import io.moonlighting.redditclientv2.core.data.remote.RedditPostsJSONResponse
 
 data class RedditPostRemote(val fullname: String,
@@ -8,6 +9,7 @@ data class RedditPostRemote(val fullname: String,
                             val author: String,
                             val thumbnail: String,
                             val url: String,
+                            val redditLink: String,
                             val createdUtc: Long,
 ) {
 
@@ -18,6 +20,7 @@ data class RedditPostRemote(val fullname: String,
                 jsonPost.author,
                 jsonPost.thumbnail,
                 jsonPost.url,
+                RedditAppModule.REDDIT_MOBILE_ENDPOINT+jsonPost.permalink,
                 jsonPost.createdUtc
             )
 }
