@@ -6,21 +6,27 @@ import io.moonlighting.redditclientv2.core.data.remote.RedditPostsJSONResponse
 data class RedditPostRemote(val fullname: String,
                             val title: String,
                             val subreddit: String,
+                            val subredditId: String,
                             val author: String,
                             val thumbnail: String,
                             val url: String,
+                            val contentText: String,
                             val redditLink: String,
+                            val postHint: String?,
                             val createdUtc: Long,
 ) {
-
     constructor(jsonPost: RedditPostsJSONResponse.PostsJsonData.JsonPostData.JsonPost) :
-            this(jsonPost.name,
-                jsonPost.title,
-                jsonPost.subredditNamePrefixed,
-                jsonPost.author,
-                jsonPost.thumbnail,
-                jsonPost.url,
-                RedditAppModule.REDDIT_MOBILE_ENDPOINT+jsonPost.permalink,
-                jsonPost.createdUtc
+            this(
+                fullname = jsonPost.name,
+                title = jsonPost.title,
+                subreddit = jsonPost.subredditNamePrefixed,
+                subredditId = jsonPost.subredditId,
+                author = jsonPost.author,
+                thumbnail = jsonPost.thumbnail,
+                contentText = jsonPost.selftext,
+                url = jsonPost.url,
+                redditLink = RedditAppModule.REDDIT_MOBILE_ENDPOINT+jsonPost.permalink,
+                postHint = jsonPost.postHint,
+                createdUtc = jsonPost.createdUtc
             )
 }

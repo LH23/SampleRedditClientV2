@@ -11,12 +11,15 @@ data class RedditPostsJSONResponse(@Json(name = "data") val data: PostsJsonData)
             class JsonPost(
                 @Json(name = "name") val name: String,
                 @Json(name = "subreddit_name_prefixed") val subredditNamePrefixed: String,
+                @Json(name = "subreddit_id") val subredditId: String,
                 @Json(name = "title") val title: String,
+                @Json(name = "selftext") val selftext: String,
                 @Json(name = "author") val author: String,
                 @Json(name = "created_utc") val createdUtc: Long,
                 @Json(name = "thumbnail") val thumbnail: String,
                 @Json(name = "num_comments") val numComments: Int,
                 @Json(name = "url") val url: String,
+                @Json(name = "post_hint") val postHint: String?,
                 @Json(name = "permalink") val permalink: String,
                 @Json(name = "preview") val preview: Preview?,
             ) {
