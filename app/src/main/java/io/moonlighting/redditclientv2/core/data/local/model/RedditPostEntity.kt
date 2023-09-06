@@ -15,29 +15,39 @@ data class RedditPostEntity(
     val title: String,
     @ColumnInfo(name = "author")
     val author: String,
-    @ColumnInfo(name = "subreddit")
-    val subreddit: String,
+    @ColumnInfo(name = "subredditName")
+    val subredditName: String,
+    @ColumnInfo(name = "subredditId")
+    val subredditId: String,
+    @ColumnInfo(name = "subredditIcon")
+    val subredditIcon: String? = null,
     @ColumnInfo(name = "thumbnail")
     val thumbnail: String,
+    @ColumnInfo(name = "contentText")
+    val contentText: String,
     @ColumnInfo(name = "sourceUrl")
     val sourceUrl: String,
     @ColumnInfo(name = "redditLink")
     val redditLink: String,
+    @ColumnInfo(name = "postHint")
+    val postHint: String?,
     @ColumnInfo(name = "createdUtc")
     val createdUtc: Long,
     @ColumnInfo(name = "created_at")
     val createdLocallyAt: Long = System.currentTimeMillis()
 ) {
-
     constructor(redditPostRemote: RedditPostRemote) : this(
-        null,
-        redditPostRemote.fullname,
-        redditPostRemote.title,
-        redditPostRemote.author,
-        redditPostRemote.subreddit,
-        redditPostRemote.thumbnail,
-        redditPostRemote.url,
-        redditPostRemote.redditLink,
-        redditPostRemote.createdUtc
+        gid = null,
+        fullname = redditPostRemote.fullname,
+        title = redditPostRemote.title,
+        author = redditPostRemote.author,
+        subredditName = redditPostRemote.subredditName,
+        subredditId = redditPostRemote.subredditId,
+        thumbnail = redditPostRemote.thumbnail,
+        sourceUrl = redditPostRemote.url,
+        contentText = redditPostRemote.contentText,
+        redditLink = redditPostRemote.redditLink,
+        postHint = redditPostRemote.postHint,
+        createdUtc = redditPostRemote.createdUtc
     )
 }

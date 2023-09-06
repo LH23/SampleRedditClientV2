@@ -5,7 +5,7 @@ import io.moonlighting.redditclientv2.core.data.remote.RedditPostsJSONResponse
 
 data class RedditPostRemote(val fullname: String,
                             val title: String,
-                            val subreddit: String,
+                            val subredditName: String,
                             val subredditId: String,
                             val author: String,
                             val thumbnail: String,
@@ -19,7 +19,7 @@ data class RedditPostRemote(val fullname: String,
             this(
                 fullname = jsonPost.name,
                 title = jsonPost.title,
-                subreddit = jsonPost.subredditNamePrefixed,
+                subredditName = jsonPost.subredditNamePrefixed,
                 subredditId = jsonPost.subredditId,
                 author = jsonPost.author,
                 thumbnail = jsonPost.thumbnail,
