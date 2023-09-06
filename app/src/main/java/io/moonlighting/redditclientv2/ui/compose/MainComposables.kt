@@ -18,8 +18,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.moonlighting.redditclientv2.R
-import io.moonlighting.redditclientv2.ui.compose.postslist.RedditPostType
-import io.moonlighting.redditclientv2.ui.compose.postslist.UIRedditPost
 
 
 @Composable
@@ -61,17 +59,3 @@ fun SubredditName(text: String, modifier: Modifier = Modifier, size: Int = 8) {
 fun AuthorName(text: String, modifier: Modifier = Modifier, size: Int = 8) {
     Text(text, fontSize = size.sp, fontStyle = FontStyle.Italic, color = Color.Gray, modifier = modifier)
 }
-
-
-val fakePost = UIRedditPost(
-    "00_asdcvb",
-    "This is a test post with something very amazing",
-    "r/amazed",
-    "https://freeiconshop.com/wp-content/uploads/edd/reddit-flat.png",
-    "u/lio23",
-    "https://freeiconshop.com/wp-content/uploads/edd/reddit-flat.png",
-    "https://freeiconshop.com/icon/reddit-icon-flat/",
-    "https://reddit.com",
-    RedditPostType.IMAGE_POST,
-    "12/8/2023 03:55pm"
-)

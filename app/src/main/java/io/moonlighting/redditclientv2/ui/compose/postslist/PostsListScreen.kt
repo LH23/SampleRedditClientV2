@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import io.moonlighting.redditclientv2.R
 import io.moonlighting.redditclientv2.ui.compose.ErrorMessage
 import io.moonlighting.redditclientv2.ui.compose.LoadingScreen
+import io.moonlighting.redditclientv2.ui.model.UIRedditPost
 
 @Composable
 fun PostsListScreen(

@@ -34,7 +34,8 @@ import io.moonlighting.redditclientv2.R
 import io.moonlighting.redditclientv2.ui.compose.AuthorName
 import io.moonlighting.redditclientv2.ui.compose.LoadingScreen
 import io.moonlighting.redditclientv2.ui.compose.SubredditName
-import io.moonlighting.redditclientv2.ui.compose.fakePost
+import io.moonlighting.redditclientv2.ui.model.UIRedditPost
+import io.moonlighting.redditclientv2.ui.model.fakePost
 import kotlinx.coroutines.flow.Flow
 
 @Composable

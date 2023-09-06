@@ -8,6 +8,7 @@ import app.cash.turbine.turbineScope
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl.Companion.errorMessage
 import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl.Companion.fakePosts
+import io.moonlighting.redditclientv2.ui.model.UIRedditPost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList

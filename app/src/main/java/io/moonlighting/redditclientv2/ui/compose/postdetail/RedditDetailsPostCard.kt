@@ -24,9 +24,9 @@ import io.moonlighting.redditclientv2.R
 import io.moonlighting.redditclientv2.ui.compose.AuthorName
 import io.moonlighting.redditclientv2.ui.compose.ErrorMessage
 import io.moonlighting.redditclientv2.ui.compose.SubredditName
-import io.moonlighting.redditclientv2.ui.compose.fakePost
-import io.moonlighting.redditclientv2.ui.compose.postslist.RedditPostType
-import io.moonlighting.redditclientv2.ui.compose.postslist.UIRedditPost
+import io.moonlighting.redditclientv2.ui.model.RedditPostType
+import io.moonlighting.redditclientv2.ui.model.UIRedditPost
+import io.moonlighting.redditclientv2.ui.model.fakePost
 
 @Composable
 fun RedditDetailsPostCard(post: UIRedditPost,
@@ -44,7 +44,7 @@ fun RedditDetailsPostCard(post: UIRedditPost,
                 RedditPostType.IMAGE_POST -> { FullSizedImage(post.url, modifier = Modifier.weight(1f)) }
 //                VIDEO_POST -> {}
 //                WEB_POST -> {}
-//                TEXT_POST -> {}
+                RedditPostType.TEXT_POST -> { Text(post.contentText, modifier = Modifier.weight(1f)) }
                 else -> { ErrorMessage(stringResource(R.string.error_invalid_post)) }
             }
             PostCardFooter(savePost, sharePost, openPost)
@@ -68,7 +68,7 @@ fun PostCardHeader(post: UIRedditPost, modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun SubredditIcon(iconUrl: String, modifier: Modifier = Modifier) {
+fun SubredditIcon(iconUrl: String?, modifier: Modifier = Modifier) {
     GlideImage(
         model = iconUrl,
         contentScale = ContentScale.Crop,

@@ -8,7 +8,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.moonlighting.redditclientv2.core.data.RedditClientRepository
-import io.moonlighting.redditclientv2.core.data.model.RedditPost
+import io.moonlighting.redditclientv2.ui.model.UIRedditPost
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -78,43 +78,8 @@ data class PostsListUiState (
     val error: String? = null
 )
 
-data class UIRedditPost(
-    val fullname: String,
-    val title: String,
-    val subredditPrefixed: String,
-    val subredditIconUrl: String,
-    val authorPrefixed: String,
-    val thumbnail: String,
-    val url: String,
-    val redditLink: String,
-    val type: RedditPostType,
-    val creationDateFormatted: String
-    ) {
-
-
-    constructor(post: RedditPost) : this(
-        post.fullname,
-        post.title,
-        post.subreddit,
-        "", //TODO get subreddit icon
-        "u/"+post.author,
-        post.thumbnail.replace("&amp;","&"),
-        post.url,
-        post.redditLink,
-        RedditPostType.IMAGE_POST,
-        formatDate(post.creationDate)
-    )
-}
-
 fun formatDate(creationDate: Date): String {
     val formatter = SimpleDateFormat("MMM dd HH:mm", Locale.US)
     return formatter.format(creationDate)
-}
-
-enum class RedditPostType {
-    IMAGE_POST,
-    VIDEO_POST,
-    WEB_POST,
-    TEXT_POST
 }
 
