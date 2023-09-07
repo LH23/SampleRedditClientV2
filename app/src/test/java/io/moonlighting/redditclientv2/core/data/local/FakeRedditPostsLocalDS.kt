@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.testing.asPagingSourceFactory
 import io.moonlighting.redditclientv2.core.data.local.model.RedditPostEntity
 import io.moonlighting.redditclientv2.core.data.remote.model.RedditPostRemote
+import kotlinx.coroutines.flow.Flow
 
 class FakeRedditPostsLocalDS(
     private val fakeData: MutableList<RedditPostEntity>
@@ -28,5 +29,9 @@ class FakeRedditPostsLocalDS(
 
     override suspend fun getCreationTime(): Long =
         fakeData.minBy { it.createdLocallyAt }.createdLocallyAt
+
+    override fun getRedditPost(fullname: String): Flow<RedditPostEntity> {
+        TODO("Not yet implemented")
+    }
 
 }

@@ -21,10 +21,10 @@ class RedditPostsLocalDSImplTest {
 
     private lateinit var fakeDao: FakeDao
     private val entityPosts: List<RedditPostEntity> = (0 until 10).map {
-        RedditPostEntity(null, "name$it","Fake Title $it","","","","")
+        RedditPostEntity(null, "name$it","Fake Title $it","","","","","","","","","",0L)
     }
     private val remotePosts: List<RedditPostRemote> = (0 until 10).map {
-        RedditPostRemote("remotename$it","Remote Fake Title $it","","","","")
+        RedditPostRemote("remotename$it","Remote Fake Title $it","","","","","","","","",0L)
     }
 
     private val testDispatcher = StandardTestDispatcher()

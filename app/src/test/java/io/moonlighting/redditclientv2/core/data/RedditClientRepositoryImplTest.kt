@@ -20,10 +20,10 @@ class RedditClientRepositoryImplTest {
 
     private lateinit var repository: RedditClientRepositoryImpl
 
-    private val postLocal1 = RedditPostEntity(null, "10","TitleLocal1","","","","")
-    private val postLocal2 = RedditPostEntity(null, "11","TitleLocal2","","","","")
-    private val postRemote1 = RedditPostRemote("20","TitleRemote1","","","","")
-    private val postRemote2 = RedditPostRemote("21","TitleRemote2","","","","")
+    private val postLocal1 = RedditPostEntity(null, "10","TitleLocal1","","","","","","","","","",0L)
+    private val postLocal2 = RedditPostEntity(null, "11","TitleLocal2","","","","","","","","","",0L)
+    private val postRemote1 = RedditPostRemote("20","TitleRemote1","","","","","","","","",0L)
+    private val postRemote2 = RedditPostRemote("21","TitleRemote2","","","","","","","","",0L)
     private val postLocalRemote1 = RedditPostEntity(postRemote1)
     private val postLocalRemote2 = RedditPostEntity(postRemote2)
 

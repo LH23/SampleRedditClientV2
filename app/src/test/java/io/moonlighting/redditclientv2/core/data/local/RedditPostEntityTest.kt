@@ -13,12 +13,16 @@ class RedditPostEntityTest {
         val redditPostRemote = RedditPostRemote(
             fullname = "123fullname",
             title = "Title",
+            subredditName = "Subreddit",
+            subredditId = "t5_asdf",
             author = "Author",
-            subreddit = "Subreddit",
             thumbnail = "Thumbnail",
-            url = "SourceURL"
+            url = "SourceURL",
+            contentText = "",
+            redditLink = "https://wwww.reddit.com/",
+            postHint = "image",
+            createdUtc = 0L
         )
-
         // when
         val redditPostEntity = RedditPostEntity(redditPostRemote)
 
@@ -26,7 +30,8 @@ class RedditPostEntityTest {
         assertEquals(redditPostRemote.fullname, redditPostEntity.fullname)
         assertEquals(redditPostRemote.title, redditPostEntity.title)
         assertEquals(redditPostRemote.author, redditPostEntity.author)
-        assertEquals(redditPostRemote.subreddit, redditPostEntity.subreddit)
+        assertEquals(redditPostRemote.subredditName, redditPostEntity.subredditName)
+        assertEquals(redditPostRemote.subredditId, redditPostEntity.subredditId)
         assertEquals(redditPostRemote.thumbnail, redditPostEntity.thumbnail)
         assertEquals(redditPostRemote.url, redditPostEntity.sourceUrl)
     }

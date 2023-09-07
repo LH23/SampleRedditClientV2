@@ -31,7 +31,7 @@ class RedditPostRemoteTest {
         assertEquals(redditPostRemote.fullname, redditJsonPost.name)
         assertEquals(redditPostRemote.title, redditJsonPost.title)
         assertEquals(redditPostRemote.author, redditJsonPost.author)
-        assertEquals(redditPostRemote.subreddit, redditJsonPost.subredditNamePrefixed)
+        assertEquals(redditPostRemote.subredditName, redditJsonPost.subredditNamePrefixed)
         assertEquals(redditPostRemote.thumbnail, redditJsonPost.thumbnail)
         assertEquals(redditPostRemote.url, redditJsonPost.url)
     }
