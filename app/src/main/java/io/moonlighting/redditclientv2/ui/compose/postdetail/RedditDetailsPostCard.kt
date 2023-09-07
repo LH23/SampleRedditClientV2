@@ -1,5 +1,6 @@
 package io.moonlighting.redditclientv2.ui.compose.postdetail
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,9 +43,9 @@ fun RedditDetailsPostCard(post: UIRedditPost,
             PostCardHeader(post)
             when (post.type) {
                 RedditPostType.IMAGE_POST -> { FullSizedImage(post.url, modifier = Modifier.weight(1f)) }
-//                VIDEO_POST -> {}
-//                WEB_POST -> {}
-                RedditPostType.TEXT_POST -> { Text(post.contentText, modifier = Modifier.weight(1f)) }
+                RedditPostType.VIDEO_POST -> { FullSizedVideo(post.url, modifier = Modifier.weight(1f)) }
+                RedditPostType.WEB_POST -> { FullSizedWebView(post.url, modifier = Modifier.weight(1f))}
+                RedditPostType.TEXT_POST -> { FullSizedText(post.contentText, modifier = Modifier.weight(1f)) }
                 else -> { ErrorMessage(stringResource(R.string.error_invalid_post)) }
             }
             PostCardFooter(savePost, sharePost, openPost)
@@ -88,6 +89,35 @@ fun FullSizedImage(imageUrl: String, modifier: Modifier = Modifier) {
         alignment = Alignment.Center,
         modifier = modifier.fillMaxWidth().fillMaxHeight(),
         contentDescription = null
+    )
+}
+
+@Composable
+fun FullSizedVideo(videoUrl: String, modifier: Modifier = Modifier) {
+    VideoPlayer(
+        videoUri = Uri.parse(videoUrl),
+        modifier = modifier.fillMaxWidth().fillMaxHeight()
+    )
+}
+
+@Composable
+fun VideoPlayer(videoUri: Uri?, modifier: Modifier = Modifier) {
+    TODO("Not yet implemented")
+}
+
+@Composable
+fun FullSizedWebView(websiteUrl: String, modifier: Modifier = Modifier) {
+    FullSizedWebView(
+        websiteUrl = websiteUrl,
+        modifier = modifier.fillMaxWidth().fillMaxHeight()
+    )
+}
+
+@Composable
+fun FullSizedText(contentText: String, modifier: Modifier = Modifier) {
+    Text(
+        contentText,
+        modifier = modifier.fillMaxWidth().fillMaxHeight()
     )
 }
 
