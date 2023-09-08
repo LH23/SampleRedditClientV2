@@ -1,5 +1,6 @@
 [versions]
 agp = "8.3.0-alpha03"
+exoplayer = "2.15.1"
 kotlin = "1.9.0"
 kotlinx-coroutines-test = "1.7.2"
 ksp = "1.9.0-1.0.13"
@@ -36,6 +37,7 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-paging-testing = { module = "androidx.paging:paging-testing", version.ref = "paging" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoplayer" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
