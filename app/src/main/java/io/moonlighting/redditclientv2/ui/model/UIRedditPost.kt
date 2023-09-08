@@ -32,12 +32,13 @@ data class UIRedditPost(
 }
 
 private fun getType(hint: String?): RedditPostType {
+    println("post hint $hint")
     return when (hint) {
         "image" -> RedditPostType.IMAGE_POST
-        "hosted:video " -> RedditPostType.VIDEO_POST
+        "hosted:video" -> RedditPostType.VIDEO_POST
         "link" -> RedditPostType.WEB_POST
         null -> RedditPostType.TEXT_POST
-        else -> RedditPostType.WEB_POST // TODO check this default
+        else -> RedditPostType.IMAGE_POST // TODO check this default
     }
 }
 

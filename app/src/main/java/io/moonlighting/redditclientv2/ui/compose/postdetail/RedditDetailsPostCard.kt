@@ -1,6 +1,9 @@
 package io.moonlighting.redditclientv2.ui.compose.postdetail
 
 import android.net.Uri
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,10 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -25,6 +31,8 @@ import io.moonlighting.redditclientv2.R
 import io.moonlighting.redditclientv2.ui.compose.AuthorName
 import io.moonlighting.redditclientv2.ui.compose.ErrorMessage
 import io.moonlighting.redditclientv2.ui.compose.SubredditName
+import io.moonlighting.redditclientv2.ui.compose.utils.VideoPlayer
+import io.moonlighting.redditclientv2.ui.compose.utils.WebViewPage
 import io.moonlighting.redditclientv2.ui.model.RedditPostType
 import io.moonlighting.redditclientv2.ui.model.UIRedditPost
 import io.moonlighting.redditclientv2.ui.model.fakePost
@@ -55,7 +63,9 @@ fun RedditDetailsPostCard(post: UIRedditPost,
 
 @Composable
 fun PostCardHeader(post: UIRedditPost, modifier: Modifier = Modifier) {
-    Row (modifier = modifier.fillMaxWidth().height(56.dp),
+    Row (modifier = modifier
+        .fillMaxWidth()
+        .height(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         SubredditIcon(post.subredditIconUrl)
@@ -87,37 +97,42 @@ fun FullSizedImage(imageUrl: String, modifier: Modifier = Modifier) {
         model = imageUrl,
         contentScale = ContentScale.Fit,
         alignment = Alignment.Center,
-        modifier = modifier.fillMaxWidth().fillMaxHeight(),
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
         contentDescription = null
     )
 }
 
 @Composable
 fun FullSizedVideo(videoUrl: String, modifier: Modifier = Modifier) {
+    println("UI VIDEO URL $videoUrl")
     VideoPlayer(
         videoUri = Uri.parse(videoUrl),
-        modifier = modifier.fillMaxWidth().fillMaxHeight()
+        modifier = modifier.fillMaxWidth()
     )
 }
 
 @Composable
-fun VideoPlayer(videoUri: Uri?, modifier: Modifier = Modifier) {
-    TODO("Not yet implemented")
-}
-
-@Composable
 fun FullSizedWebView(websiteUrl: String, modifier: Modifier = Modifier) {
-    FullSizedWebView(
-        websiteUrl = websiteUrl,
-        modifier = modifier.fillMaxWidth().fillMaxHeight()
+    WebViewPage(
+        url = websiteUrl,
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
     )
 }
 
 @Composable
 fun FullSizedText(contentText: String, modifier: Modifier = Modifier) {
+    val state = rememberScrollState()
     Text(
         contentText,
-        modifier = modifier.fillMaxWidth().fillMaxHeight()
+        modifier = modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(state)
     )
 }
 

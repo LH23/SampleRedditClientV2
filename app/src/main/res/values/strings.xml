@@ -6,4 +6,6 @@
     <string name="menu_toggle_dark_mode">Toggle Dark Mode</string>
     <string name="error_invalid_post">Invalid Post Type</string>
     <string name="error_post_not_found">Post Not Found</string>
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
 </resources>
