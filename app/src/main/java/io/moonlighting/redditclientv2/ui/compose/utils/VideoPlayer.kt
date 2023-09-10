@@ -41,7 +41,7 @@ fun VideoPlayer(videoUri: Uri?, modifier: Modifier = Modifier) {
     }
     val isPlaying = playbackState == Player.EVENT_IS_PLAYING_CHANGED // TODO check this
 
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+    Box(modifier = modifier) {
         AndroidView (
             factory = { context ->
                 PlayerView(context).apply {
@@ -56,14 +56,14 @@ fun VideoPlayer(videoUri: Uri?, modifier: Modifier = Modifier) {
             },
             modifier = Modifier
                 .padding(16.dp)
-                .align(Alignment.BottomEnd)
+                .align(Alignment.Center)
         ) {
             Icon(
                 imageVector = if (isPlaying) RedditClientIcons.Pause else RedditClientIcons.Play,
                 contentDescription = if (isPlaying) stringResource(R.string.pause)
                                      else stringResource(R.string.play),
                 tint = Color.White,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(64.dp)
             )
         }
     }
