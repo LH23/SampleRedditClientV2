@@ -22,11 +22,16 @@ data class RedditPostsJSONResponse(@Json(name = "data") val data: PostsJsonData)
                 @Json(name = "post_hint") val postHint: String?,
                 @Json(name = "permalink") val permalink: String,
                 @Json(name = "preview") val preview: Preview?,
+                @Json(name = "media") val media: Media?,
             ) {
                 class Preview(@Json(name = "images") val images: List<Image>) {
                     class Image(@Json(name = "source") val source: Source) {
                         class Source(@Json(name = "url") val url: String)
                     }
+                }
+
+                class Media(@Json(name = "reddit_video") val redditVideo: RedditVideo) {
+                    class RedditVideo(@Json(name = "fallback_url") val fallbackUrl: String)
                 }
             }
         }
