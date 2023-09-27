@@ -64,58 +64,71 @@ android {
 }
 
 dependencies {
-
+    // ktx + splashscreen
     implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.core.splashscreen)
 
+    // lifecycle
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
+
+    // compose ui + material3
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
 
-    implementation(platform(libs.compose.bom))
-    implementation(libs.activity.compose)
-
-    implementation(libs.androidx.core.splashscreen)
+    // navigation
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.compose)
 
+    // paging
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.room.paging)
+
+    // exoplayer
+    implementation(libs.exoplayer)
+
+    // retrofit + moshi
     implementation(libs.retrofit)
     implementation(libs.moshi)
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
+
+    // glide
     implementation(libs.glide)
     implementation(libs.glide.compose)
     implementation(libs.glide.annotations)
-    ksp(libs.glideksp)
+    ksp(libs.glide.ksp)
 
+    // room
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.paging)
     ksp(libs.androidx.room.compiler)
 
+    // hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.android.compiler)
     kapt(libs.hilt.compiler)
 
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
-    
-    implementation(libs.exoplayer)
+    // immutable collections
+    implementation(libs.kotlinx.collections.immutable)
 
-    // test
+    // testing
     testImplementation(libs.junit.jupiter)
-    testImplementation(libs.mockito.core)
+    testImplementation(libs.junit.jupiter.engine)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.paging.common)
     testImplementation(libs.androidx.paging.testing)
-    testRuntimeOnly(libs.junit.jupiter.engine)
-    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.mockito.core)
     testImplementation(libs.turbine)
 
-    androidTestImplementation(libs.espresso.core)
+    // android testing
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.navigation.testing)
 
