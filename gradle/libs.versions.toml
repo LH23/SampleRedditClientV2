@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.0-alpha03"
+agp = "8.1.1"
 exoplayer = "2.15.1"
 kotlin = "1.9.0"
 kotlinx-coroutines-test = "1.7.2"
@@ -61,8 +61,8 @@ moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "converter-moshi" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "compose" }
-annotations = { group = "com.github.bumptech.glide", name = "annotations", version.ref = "annotations" }
+glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "compose" }
+glide-annotations = { group = "com.github.bumptech.glide", name = "annotations", version.ref = "annotations" }
 glideksp = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide-ksp" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }

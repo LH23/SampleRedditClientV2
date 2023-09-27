@@ -67,7 +67,6 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.annotations)
 
     implementation(libs.ui)
     implementation(libs.ui.graphics)
@@ -75,7 +74,6 @@ dependencies {
     implementation(libs.material3)
 
     implementation(platform(libs.compose.bom))
-    implementation(libs.compose)
     implementation(libs.activity.compose)
 
     implementation(libs.androidx.core.splashscreen)
@@ -87,7 +85,8 @@ dependencies {
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
     implementation(libs.glide)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.glide.compose)
+    implementation(libs.glide.annotations)
     ksp(libs.glideksp)
 
     implementation(libs.androidx.room.common)
@@ -97,6 +96,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.android.compiler)
     kapt(libs.hilt.compiler)
 
