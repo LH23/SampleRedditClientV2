@@ -41,7 +41,6 @@ class PostDetailViewModel @Inject constructor (
                 }
             }
         }
-
     }
 
     fun savePost() {

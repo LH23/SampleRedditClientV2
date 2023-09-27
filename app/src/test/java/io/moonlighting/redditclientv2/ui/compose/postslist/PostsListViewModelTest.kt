@@ -1,7 +1,5 @@
 package io.moonlighting.redditclientv2.ui.compose.postslist
 
-import android.util.Log
-import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
@@ -11,7 +9,6 @@ import io.moonlighting.redditclientv2.core.data.RedditClientRepositoryFakeImpl.C
 import io.moonlighting.redditclientv2.ui.model.UIRedditPost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.resetMain
